@@ -1,8 +1,8 @@
 
 ```json
 {
-start: location
-destination: location
+start: location,
+destination: location,
 star_rating: int [1,5]
 waiting_time_minutes: +int
 comment: string
@@ -21,6 +21,7 @@ passengers: list[passenger] {age: age, origin: {city: string, country: GER, US, 
 vehicle: {type: {class: car| bus| van | truck | bus | motorbike | scooter | taxi | horse-cart | train | camper | tractor | plane | ferry | boat | ..., model: string}, license_plate_country: GER, US, FR, ...}
 ride: {destination: location, purpose: string}
 declined_rides: list[location]
+source: url | string
 }
 
 ```
