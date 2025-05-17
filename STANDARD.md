@@ -1,26 +1,66 @@
 
 ```json
 {
-start: location
-destination: location
-star_rating: int [1,5]
-waiting_time_minutes: +int
-comment: string
-date: date
-start_time: time
-arrival_time: time
-signal:
-{sign_to: string, vehicles_per_minute: int} |
-{signal: "thumb" | "waving" | ..., vehicles_per_minute: int} |
-{asking: string, total_solicited: int} |
-{invited: bool, while_doing: string} |
-{pre_arranged: bool, through: string}
-gift: {money: {value: +float, currency: EUR, USD, ...}} | {food: string} | {goods: string}
-hitchhikers: list[person] 
-passengers: list[passenger] {age: age, origin: {city: string, country: GER, US, FR, ...}, driver: bool, reason_to_pick_up_or_reject: string}
-vehicle: {type: {class: car| bus| van | truck | bus | motorbike | scooter | taxi | horse-cart | train | camper | tractor | plane | ferry | boat | ..., model: string}, license_plate_country: GER, US, FR, ...}
-ride: {destination: location, purpose: string}
-declined_rides: list[location]
+"start": {
+            "type": "location",
+            "description": "Starting point of the hitchhiking ride."
+        },
+"destination": {
+            "type": "location",
+            "description": "Destination of the hitchhiking ride."
+        },
+"star_rating": {
+            "type": "int",
+            "description": "Very subjective rating of the spot where the ride started.",
+            "enum" [1, 2, 3, 4, 5]
+        },
+"waiting_time_minutes": {
+            "type": "int",
+            "description": "Positive integer indicating the timespan from when rides were first solicited until the hitchhiker got their ride."
+        },
+"comment": {
+            "type": "string",
+            "description": "Any free-form comment about the starting location, destination or the entire ride."
+        },
+"start_time": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Date and time when the ride started from `start` in ... format. The time-zone of `start` is assumed."
+        },
+"arrival_time": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Date and time when the ride ended in `destination` in ... format. The time-zone of `destination` is assumed."
+        },
+"signal": {
+            "type": "signal",
+            "description": "Information about the method used to get the ride"
+        },
+
+"gift": {
+            "type": "list[gift]",
+            "description": "Possible gift that the hitchhiker received from the passengers."
+        },
+"hitchhikers": {
+            "type": "list[person]",
+            "description": "Most often a description of a solo-hitchhiker but also caters for couples or groups of hitchhikers."
+        },
+"passengers": {
+            "type": "list[passenger]",
+            "description": "List of passengers in the vehicle not including the hitchhiker, putting specific emphasize on the driver."
+        },
+"vehicle": {
+            "type": "list[passenger]",
+            "description": "List of passengers in the vehicle not including the hitchhiker, putting specific emphasize on the driver."
+        },
+"ride": {
+            "type": "ride",
+            "description": "Information about the ride of the car beyond the hitchhiker's ride."
+        },
+"declined_rides": {
+            "type": "list[decline_ride]",
+            "description": "Information about rides that were offered to the hitchhiker but that were declined by the hitchhiker."
+        }
 }
 
 ```
