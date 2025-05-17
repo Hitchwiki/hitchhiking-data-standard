@@ -6,6 +6,8 @@ This standard should reflect the diversity of hitchhikers such that it allows sh
 
 This data format should reflect a single ride via hitchhiking. Building up on this it will be possible to connect rides to trips, judge the "hichhikability" of certain frequently used spots as well as to gain deeper insights into state of hitchhiking.
 
+This standard should also provide the single source of truth about how a hitchhiking ride NOSTR event should be tagged.
+
 To establish this standard and to propose new features of hitchhiking rides that could be recorded the proposal process from [OSM](https://wiki.openstreetmap.org/wiki/Proposal_process) is adapted.
 
 - create a new issue called "Proposal: xxx", stating which new dimenion of hitchhiking you want to add to the already existing standard or how you would extend or change it to better capture the reality of hitchhiking in more detail.
