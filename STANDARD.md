@@ -59,7 +59,7 @@
         },
 "declined_rides": {
             "type": "list[decline_ride]",
-            "description": "Information about rides that were offered to the hitchhiker but that were declined by the hitchhiker."
+            "description": "Information about rides that were offered to the hitchhiker but that were declined by the them."
         }
 }
 
