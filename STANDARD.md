@@ -16,7 +16,7 @@
 | gifts                 | optional  | list[gift]          | Possible gift that the hitchhiker received from the passengers.                                                     |                |
 | hitchhikers          | required  | list[person]        | Most often a description of a solo-hitchhiker but also caters for couples or groups of hitchhikers. To convey not more than the number of hitchhikers use empty `person` objects.                |                |
 | passengers           | optional  | list[passenger]     | List of passengers in the vehicle not including the hitchhiker, putting specific emphasize on the driver.           |                |
-| vehicle              | optional  | list[passenger]     | List of passengers in the vehicle not including the hitchhiker, putting specific emphasize on the driver.           |                |
+| mode_of_transportation              | optional  | mode_of_transportation    | Information about the vehicle that was used for the ride. In rarer cases this could be a plane or boat as well.           |                |
 | ride                 | optional  | ride                | Information about the ride of the car beyond the hitchhiker's ride.                                                 |                |
 | declined_rides       | optional  | list[decline_ride]  | Information about rides that were offered to the hitchhiker but that were declined by the them.                     |                |
 | source       | required  | string  | Source of this record by URL of the application. Or "private" if the records stem from an independently and individually collected source.               |                |
