@@ -8,6 +8,8 @@ This data format should reflect a single ride via hitchhiking. Building up on th
 
 This standard should also provide the single source of truth about how a hitchhiking ride NOSTR event should be tagged.
 
+To describe the tags of this standard we took inspiration from [OSM tagging](https://wiki.openstreetmap.org/wiki/Tag:highway%3Dhitchhiking) and [NOSTR Standardized Tags](https://github.com/nostr-protocol/nips?tab=readme-ov-file#standardized-tags).
+
 To establish this standard and to propose new features of hitchhiking rides that could be recorded the proposal process from [OSM](https://wiki.openstreetmap.org/wiki/Proposal_process) is adapted.
 
 - create a new issue called "Proposal: xxx", stating which new dimenion of hitchhiking you want to add to the already existing standard or how you would extend or change it to better capture the reality of hitchhiking in more detail.
