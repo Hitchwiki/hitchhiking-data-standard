@@ -18,4 +18,4 @@
 | ride                 | optional  | ride                | Information about the ride of the car beyond the hitchhiker's ride.                                                 |                |
 | declined_rides       | optional  | list[decline_ride]  | Information about rides that were offered to the hitchhiker but that were declined by the them.                     |                |
 | source       | required  | string  | Source of this record by URL of the application. Or "private" if the records stem from an independently and individually collected source.               |                |
-| reason       | option  | list[string]  | Reason of the hitchhiking ride.        | commute, holiday, sport, no_money, safe_money, exchange, adventure, fun, social_contact, ecological_reasons             |
+| reasons       | option  | list[string]  | Reason of the hitchhiking ride.        | commute, holiday, sport, no_money, safe_money, exchange, adventure, fun, social_contact, ecological_reasons             |
