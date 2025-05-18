@@ -17,3 +17,4 @@
 | vehicle              | optional  | list[passenger]     | List of passengers in the vehicle not including the hitchhiker, putting specific emphasize on the driver.           |                |
 | ride                 | optional  | ride                | Information about the ride of the car beyond the hitchhiker's ride.                                                 |                |
 | declined_rides       | optional  | list[decline_ride]  | Information about rides that were offered to the hitchhiker but that were declined by the them.                     |                |
+| source       | required  | string  | Source of this record by URL of the application. Or "private" if the records stem from an independently and individually collected source.               |                |
