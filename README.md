@@ -1,4 +1,4 @@
-# Standard for what and how to track hitchhiking rides
+# Standard for how to track hitchhiking rides
 
 Applications which help hitchikers track their trips should rely one a common data format such that records of rides can be shared easily and be used for the benefit of all.
 
