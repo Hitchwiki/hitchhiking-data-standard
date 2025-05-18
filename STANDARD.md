@@ -8,9 +8,9 @@
 | star_rating          | recommended  | int                 | Very subjective rating of the spot where the ride started.                                                          | 1, 2, 3, 4, 5  |
 | waiting_time_minutes | recommended  | int                 | Positive integer indicating the timespan from when rides were first solicited until the hitchhiker got their ride.  |                |
 | comment              | optional  | string              | Any free-form comment about the starting location, destination or the entire ride. Preferrably in English language.                                 |                |
-| departure_time           | recommended  | string (date-time)  | Date and time when the ride started from `start` in ... format. The time-zone of `start` is assumed.                |                |
+| departure_time           | recommended  | string (Unix TS Secs)  | Departure time when the ride started from `origin` in UTC timestamp (seconds) format.                |                |
 | origin_tz           | recommended  | string (IANA TZ ID)  |  IANA Timezone ID of the origin (e.g., "America/New_York") for accurate local time display. Required if `departure_time` is present.              |                |
-| arrival_time         | optional  | string (date-time)  | Date and time when the ride ended in `destination` in ... format. The time-zone of `destination` is assumed.        |                |
+| arrival_time         | optional  | string (Unix TS Secs)  | Arrival time when the ride ended in `destination` in UTC timestamp (seconds) format.|                |
 | destination_tz           | recommended  | string (IANA TZ ID)  |  IANA Timezone ID of the destination (e.g., "America/New_York") for accurate local time display. Required if `arrival_time` is present.          |                |
 | signal               | optional  | signal              | Information about the method used to get the ride                                                                   |                |
 | gifts                 | optional  | list[gift]          | Possible gift that the hitchhiker received from the passengers.                                                     |                |
