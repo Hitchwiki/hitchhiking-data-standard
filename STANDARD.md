@@ -12,7 +12,7 @@
 | origin_tz           | recommended  | string (IANA TZ ID)  |  IANA Timezone ID of the origin (e.g., "America/New_York") for accurate local time display. Required if `departure_time` is present.              |                |
 | arrival_time         | optional  | string (Unix TS Secs)  | Arrival time when the ride ended in `destination` in UTC timestamp (seconds) format.|                |
 | destination_tz           | recommended  | string (IANA TZ ID)  |  IANA Timezone ID of the destination (e.g., "America/New_York") for accurate local time display. Required if `arrival_time` is present.          |                |
-| signal               | optional  | signal              | Information about the method used to get the ride                                                                   |                |
+| signal               | optional  | list[signal]            | Information about the method used to get the ride                                                                   |                |
 | gifts                 | optional  | list[gift]          | Possible gift that the hitchhiker received from the passengers.                                                     |                |
 | hitchhikers          | required  | list[person]        | Most often a description of a solo-hitchhiker but also caters for couples or groups of hitchhikers. To convey not more than the number of hitchhikers use empty `person` objects.                |                |
 | passengers           | optional  | list[passenger]     | List of passengers in the vehicle not including the hitchhiker, putting specific emphasize on the driver.           |                |
