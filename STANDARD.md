@@ -11,7 +11,7 @@
 | start_time           | recommended  | string (date-time)  | Date and time when the ride started from `start` in ... format. The time-zone of `start` is assumed.                |                |
 | arrival_time         | optional  | string (date-time)  | Date and time when the ride ended in `destination` in ... format. The time-zone of `destination` is assumed.        |                |
 | signal               | optional  | signal              | Information about the method used to get the ride                                                                   |                |
-| gift                 | optional  | list[gift]          | Possible gift that the hitchhiker received from the passengers.                                                     |                |
+| gifts                 | optional  | list[gift]          | Possible gift that the hitchhiker received from the passengers.                                                     |                |
 | hitchhikers          | required  | list[person]        | Most often a description of a solo-hitchhiker but also caters for couples or groups of hitchhikers. To convey not more than the number of hitchhikers use empty `person` objects.                |                |
 | passengers           | optional  | list[passenger]     | List of passengers in the vehicle not including the hitchhiker, putting specific emphasize on the driver.           |                |
 | vehicle              | optional  | list[passenger]     | List of passengers in the vehicle not including the hitchhiker, putting specific emphasize on the driver.           |                |
