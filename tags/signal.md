@@ -9,7 +9,7 @@ can have different forms depending on how the ride was caught
 
 | Tag                  | Importance   | Type    | Description                                                                                                   | Enum                | Example |
 |----------------------|--------------|---------|---------------------------------------------------------------------------------------------------------------|---------------------|---------|
-| signal               | requ  | float   | The method used to signal that one is looking for a hitchhiking ride.                                                                         | "thumb", "waving" |         |
+| signal               | requ  | float   | The method used to signal that one is looking for a hitchhiking ride.                                                                         | thumb, waving |         |
 | vehicles_per_minute  | recommended  | int     | Positive integer. How many vehicles passed by approximately per minute?                                       |                     |         |
 | asking               | recommended  | string  | How/ What for was asked?                                                                                      |                     |         |
 | total_solicited      | recommended  | int     | Positive integer. How many vehicles were asked for a ride before getting a ride or stopping the search.       |                     |         |
