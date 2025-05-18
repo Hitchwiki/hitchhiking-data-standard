@@ -1,26 +1,13 @@
-```json
-{"origin": {
-    "city": {
-            "type": "string",
-            "description": "The city where the person lives in or any other administrative unit smaller than country-level."
-        },
-    "country": {
-            "type": "string",
-            "description": "Country where the person lives primarily.",
-            "enum": "ISO 3166-1 alpha-2 2-digit country codes"
-        }
-},
-"year_of_birth": {
-        "type": "float",
-        "description": "Latitude of a spot in decimal degrees"
-    },
-"gender": {
-        "type": "float",
-        "description": "Gender of the person",
-        "enum": ["male", "female" "non_binary", "prefer_not_to_say"]
-    }
-}
-```
-
+notes:
 nickname: string
 {socials: {trustroots: url, hitchwiki: url, bewelcome: url, ...}}
+
+
+| Tag                | Importance   | Type    | Description                                                                 | Enum                                         | Example |
+|--------------------|--------------|---------|-----------------------------------------------------------------------------|----------------------------------------------|---------|
+| origin.city        | recommended  | string  | The city where the person lives in or any other administrative unit smaller than country-level. |                                              |         |
+| origin.country     | recommended  | string  | Country where the person lives primarily.                                   | ISO 3166-1 alpha-2 2-digit country codes     |         |
+| year_of_birth      | recommended  | float   | Latitude of a spot in decimal degrees                                       |                                              |         |
+| gender             | recommended  | float   | Gender of the person                                                        | male, female, non_binary, prefer_not_to_say  |         |
+
+

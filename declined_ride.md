@@ -1,13 +1,4 @@
-```json
-{
-    "destination": {
-            "type": "location",
-            "description": "Possible destination of this ride."
-        },
-    "reason": {
-            "type": "string",
-            "description": "The reason that the ride was declined.",
-            "enum": ["wrong_direction", "too_short", "too_long", "safety_concerns"]
-        },
-}
-```
+| Tag         | Importance   | Type      | Description                                   | Enum                                               | Example |
+|-------------|--------------|-----------|-----------------------------------------------|----------------------------------------------------|---------|
+| destination | recommended  | location  | Possible destination of this ride.            |                                                    |         |
+| reason      | recommended  | string    | The reason that the ride was declined.         | wrong_direction, too_short, too_long, safety_concerns |         |
