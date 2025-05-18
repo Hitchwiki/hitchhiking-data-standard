@@ -16,7 +16,8 @@ can have different forms depending on how the ride was caught
 
 | Tag                  | Importance   | Type    | Description                                                                                                   | Enum                | Example |
 |----------------------|--------------|---------|---------------------------------------------------------------------------------------------------------------|---------------------|---------|
-| asking               | recommended  | string  | How/ What for was asked?                                                                                      |                     |         |
+| asking               | required  | string  | How/ What for was asked? Leave empty to just indicate that asking was used.                                                                                   |                     |         |
+| language               | recommended  | string  | The language used to ask around? Using ISO 639-3 (Three-letter codes for all known languages)                                                                                |                     |         |
 | total_solicited      | recommended  | int     | Positive integer. How many vehicles were asked for a ride before getting a ride or stopping the search.       |                     |         |
 
 
