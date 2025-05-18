@@ -10,6 +10,8 @@ can have different forms depending on how the ride was caught
 | Tag                  | Importance   | Type    | Description                                                                                                   | Enum                | Example |
 |----------------------|--------------|---------|---------------------------------------------------------------------------------------------------------------|---------------------|---------|
 | signal               | required  | float   | The method used to signal that one is looking for a hitchhiking ride.                                                                         | thumb, waving |         |
+| sign               | recommended  | boolean   | Whether a sign was used alongside the signal.                                                                         |  |         |
+| sign_content               | recommended  | string   | What was written on the sign?                                                                         |  |         |
 | vehicles_per_minute  | recommended  | int     | Positive integer. How many vehicles passed by approximately per minute?                                       |                     |         |
 
 | Tag                  | Importance   | Type    | Description                                                                                                   | Enum                | Example |
