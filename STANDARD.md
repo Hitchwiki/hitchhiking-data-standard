@@ -3,7 +3,7 @@
 
 | Tag                  | Importance   | Type                | Description                                                                                                         | Enum           | Example |
 |----------------------|--------------|---------------------|---------------------------------------------------------------------------------------------------------------------|----------------|---------|
-| start                | required  | location            | Starting point of the hitchhiking ride.                                                                             |                |
+| origin                | required  | location            | Starting location of the hitchhiking ride.                                                                             |                |
 | destination          | recommended  | location            | Destination of the hitchhiking ride.                                                                                |                |
 | star_rating          | recommended  | int                 | Very subjective rating of the spot where the ride started.                                                          | 1, 2, 3, 4, 5  |
 | waiting_time_minutes | recommended  | int                 | Positive integer indicating the timespan from when rides were first solicited until the hitchhiker got their ride.  |                |
