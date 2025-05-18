@@ -1,3 +1,6 @@
+- [ ] Approved
+
+
 | Tag        | Importance   | Type    | Description                                                                 | Enum | Example |
 |------------|--------------|---------|-----------------------------------------------------------------------------|------|---------|
 | latitude   | required  | float   | Latitude of a spot in decimal degrees                                       |      |         |

@@ -1,3 +1,5 @@
+- [ ] Approved
+
 | Tag         | Importance   | Type      | Description                                   | Enum                                               | Example |
 |-------------|--------------|-----------|-----------------------------------------------|----------------------------------------------------|---------|
 | destination | recommended  | location  | Possible destination of this ride.            |                                                    |         |

@@ -1,3 +1,6 @@
+- [ ] Approved
+
+
 | Tag         | Importance  | Type    | Description                                                        | Enum                        | Example |
 |-------------|-------------|---------|--------------------------------------------------------------------|-----------------------------|---------|
 | kind        | required | string  | Country where the person lives primarily.                          | money, food, goods          |         |

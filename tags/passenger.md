@@ -1,3 +1,6 @@
+- [ ] Approved
+
+
 inherits from `person`
 
 | Tag                         | Importance   | Type     | Description                                                                                   | Enum | Example |

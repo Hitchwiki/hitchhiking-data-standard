@@ -1,3 +1,6 @@
+- [ ] Approved
+
+
 | Tag                   | Importance   | Type    | Description                                      | Enum                                                                                                         | Example |
 |-----------------------|--------------|---------|--------------------------------------------------|--------------------------------------------------------------------------------------------------------------|---------|
 | class                 | required  | float   | Latitude of a spot in decimal degrees            | car, bus, van, truck, motorbike, scooter, taxi, horse-cart, train, camper, tractor, plane, ferry, boat       |         |
