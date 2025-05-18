@@ -7,7 +7,7 @@
 | destination          | recommended  | location            | Destination of the hitchhiking ride.                                                                                |                |
 | star_rating          | recommended  | int                 | Very subjective rating of the spot where the ride started.                                                          | 1, 2, 3, 4, 5  |
 | waiting_time_minutes | recommended  | int                 | Positive integer indicating the timespan from when rides were first solicited until the hitchhiker got their ride.  |                |
-| comment              | optional  | string              | Any free-form comment about the starting location, destination or the entire ride.                                  |                |
+| comment              | optional  | string              | Any free-form comment about the starting location, destination or the entire ride. Preferrably in English language.                                 |                |
 | start_time           | recommended  | string (date-time)  | Date and time when the ride started from `start` in ... format. The time-zone of `start` is assumed.                |                |
 | arrival_time         | optional  | string (date-time)  | Date and time when the ride ended in `destination` in ... format. The time-zone of `destination` is assumed.        |                |
 | signal               | optional  | signal              | Information about the method used to get the ride                                                                   |                |
