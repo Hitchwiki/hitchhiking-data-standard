@@ -17,4 +17,21 @@ To establish this standard and to propose new features of hitchhiking rides that
 - if a consensus is reached document it in `STANDARD.md`, another file named `object_name.md` might be used to define more complex objects.
 - inform applications like `hitchmap.com` about the extension/ change of the standard to make it come alife.
 
+## The corresponding Nostr event
+```
+{
+  "kind": ...,
+  "created_at": 1715000000, // Timestamp of THIS event object
+  "content": "...",
+  "tags": [
+    ["d", "..."], // Unique ID
+    ["title", "..."],
+    ["published_at", "..."], // Timestamp of first publication
+  ],
+  "pubkey": "...",
+  "id": "...", // ID of this specific event
+  "sig": "..."
+}
+```
+
 
