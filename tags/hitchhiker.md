@@ -1,5 +1,10 @@
 - [ ] Approved
 
+notes:
+
+nickname: string
+
+{socials: {trustroots: url, hitchwiki: url, bewelcome: url, ...}}
 
 inherits from `person`
 
