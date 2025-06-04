@@ -12,6 +12,8 @@ can have different forms depending on how the ride was caught
 | signal               | required  | float   | The method used to signal that one is looking for a hitchhiking ride.                                                                         | thumb, waving |         |
 | sign               | recommended  | boolean   | Whether a sign was used alongside the signal.                                                                         |  |         |
 | sign_content               | recommended  | string   | What was written on the sign?                                                                         |  |         |
+| sign_languages               | recommended  | list[string]   | The languages used on the sign? Using ISO 639-3 (Three-letter codes for all known languages)                                                                         |  |         |
+
 | vehicles_per_minute  | recommended  | int     | Positive integer. How many vehicles passed by approximately per minute?                                       |                     |         |
 
 | Tag                  | Importance   | Type    | Description                                                                                                   | Enum                | Example |
