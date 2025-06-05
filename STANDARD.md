@@ -20,4 +20,4 @@
 | ride                 | optional  | ride                | Information about the ride of the car beyond the hitchhiker's ride.                                                 |                |
 | declined_rides       | optional  | list[decline_ride]  | Information about rides that were offered to the hitchhiker but that were declined by the them.                     |                |
 | source       | required  | string  | Source of this record by URL of the application. Or "private" if the records stem from an independently and individually collected source.               |                |https://hitchwiki.org
-| reasons       | optional  | list[string]  | Reason for the hitchhiking ride.        | commute, holiday, sport, financial, social_exchange, cultural_exchange, recreational, environmental             |
+| reasons       | optional  | list[string]  | Reason for the hitchhiking ride.        | commute, holiday, sport, financial, social_exchange, cultural_exchange, recreational, environmental             |[holiday, financial, cultural_exchange]
