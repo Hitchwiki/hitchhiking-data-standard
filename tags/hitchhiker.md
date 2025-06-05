@@ -1,13 +1,8 @@
 - [ ] Approved
 
-notes:
-
-nickname: string
-
-{socials: {trustroots: url, hitchwiki: url, bewelcome: url, ...}}
-
 inherits from `person`
 
 | Tag                         | Importance   | Type     | Description                                                                                   | Enum | Example |
 |-----------------------------|--------------|----------|-----------------------------------------------------------------------------------------------|------|---------|
-| hitchhiking_since                   | optional  | int  | The year the person hitchhiked for the first time.                                               |      |         |
+| nickname                   | optional  | float  | Nickname of the hitchhiker. The nickname is assumed to be unique within the scope of an application that collects hitchhiking data indicated by the `source` tag.                                              |      |Alice         |
+| hitchhiking_since                   | optional  | int  | The year the person hitchhiked for the first time.                                               |      |         |2010
