@@ -6,7 +6,7 @@
 | stops                | required  | list[stop]            | Starting location of the hitchhiking ride.                                                                             |                |
 | star_rating          | recommended  | int                 | Very subjective rating of the spot where the ride started.                                                          | 1, 2, 3, 4, 5  |           |
 | comment              | optional  | string              | Any free-form comment about the starting location, destination or the entire ride. Preferrably in English language.                                 |                |
-| signals               | optional  | list[signal]            | Information about the methods used to get the ride.                                                                   |                |
+| signals               | optional  | list[signal]            | Information about the methods used to get the ride. List them in the order that they were used.                                                                  |                |
 | gifts                 | optional  | list[gift]          | Possible gift that the hitchhiker received from the passengers.                                                     |                |
 | hitchhikers          | required  | list[hitchhiker]        | Most often a description of a solo-hitchhiker but also caters for couples or groups of hitchhikers. To convey not more than the number of hitchhikers use empty `person` objects.                |                |
 | passengers           | optional  | list[passenger]     | List of passengers in the vehicle not including the hitchhiker, putting specific emphasize on the driver.           |                |
