@@ -11,8 +11,8 @@ can have different forms depending on how the ride was caught
 |----------------------|--------------|---------|---------------------------------------------------------------------------------------------------------------|---------------------|---------|
 | signal               | required  | float   | The method used to signal that one is looking for a hitchhiking ride.                                                                         | thumb, waving |         |
 | sign               | recommended  | boolean   | Whether a sign was used alongside the signal.                                                                         |  |         |
-| sign_content               | recommended  | string   | What was written on the sign?                                                                         |  |         |
-| sign_languages               | recommended  | list[string]   | The languages used on the sign? Using ISO 639-3 (Three-letter codes for all known languages)                                                                         |  |         |
+| sign_content               | recommended  | string   | What was written on the sign?                                                                         |  |Straßburg - Strasbourg          |
+| sign_languages               | recommended  | list[string (ISO 639-3)]   | The languages used on the sign? Using ISO 639-3 (Three-letter codes for all known languages). If the `sign_content` was written so it is suitable for the local language, only listing the local language here is sufficient.                                                                         |  |[deu, fra]         |
 
 | vehicles_per_minute  | recommended  | int     | Positive integer. How many vehicles passed by approximately per minute?                                       |                     |         |
 
