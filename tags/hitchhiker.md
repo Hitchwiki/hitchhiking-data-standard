@@ -1,6 +1,6 @@
 - [ ] Approved
 
-inherits from `person`
+inherits from [`person`](https://github.com/Hitchwiki/hitchhiking_data_standard/blob/main/tags/person.md)
 
 | Tag                         | Importance   | Type     | Description                                                                                   | Enum | Example |
 |-----------------------------|--------------|----------|-----------------------------------------------------------------------------------------------|------|---------|
