@@ -18,6 +18,8 @@ To establish this standard and to propose new features of hitchhiking rides that
 - close the proposal issue with a `accepted` comment and if a `object_name.md` add an `Approved` checkbox to it.
 - inform applications like `hitchmap.com` about the extension/ change of the standard to make it come alife.
 
+The sole creation of this standard provides an overview of the breadth and depth of dimensions of hitchhiking that stems from indivudual experiences and interviews with the broader community. 
+
 ## The corresponding Nostr event
 ```
 {
