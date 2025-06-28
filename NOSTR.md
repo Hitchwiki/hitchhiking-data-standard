@@ -1,6 +1,13 @@
 | Nostr Key           | Value Type             | Required? | Purpose & Notes                                           
 |---------------|------------------------|-----------|------------------------------------------------------------|
-| `kind`           | Int    | **Yes**   | . |              |
+| `kind`           | Int    | Yes  | . |       
+| `created_at`           | .    | Yes   | . |              
+| `content`           | String   | Yes   | Has to be equal to `comment` tag value. |
+| `pubkey`           | .    | Yes   | . |              
+| `id`           | .    | Yes   | . |              
+| `sec`           | .    | Yes   | . |              
+
+
 
 **Tag Structure:**
 
