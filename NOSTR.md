@@ -1,7 +1,7 @@
 | Nostr Key           | Value Type             | Required? | Purpose & Notes                                           
 |---------------|------------------------|-----------|------------------------------------------------------------|
 | `kind`           | Int    | Yes  | . |       
-| `created_at`           | .    | Yes   | . |              
+| `created_at`           | .    | Yes   | Has to be equivalent to the time in `submission_time` tag. |              
 | `content`           | String   | Yes   | Has to be equal to `comment` tag value. |
 | `pubkey`           | .    | Yes   | . |              
 | `id`           | .    | Yes   | . |              
@@ -14,7 +14,7 @@
 | Tag           | Value Type             | Required? | Purpose & Notes                                            | NIP-99 Standard? |
 |---------------|------------------------|-----------|------------------------------------------------------------|-----------------|
 | `d`           | String (UUID rec.)     | Yes   | Unique identifier for the specific ride listing/request. Prevents duplicates, enables updates/deletion. | Yes             |
-| `g`           | String (Geohash Prefix)| Yes       | Cascading **origin** geohash (rec. up to len 6) for area filtering. | Yes             |
+| `g`           | String (Geohash Prefix)| Yes       | Cascading **origin** geohash (rec. up to len 6) for area filtering. Has to be equivalent to the loaction of the first `stop` object in the `stops` tag (the starting location). | Yes             |
 
 
 
