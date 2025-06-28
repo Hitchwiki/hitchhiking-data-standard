@@ -21,20 +21,6 @@ To establish this standard and to propose new features of hitchhiking rides that
 The sole creation of this standard provides an overview of the breadth and depth of dimensions of hitchhiking that stems from indivudual experiences and interviews with the broader community. 
 
 ## The corresponding Nostr event
-```
-{
-  "kind": ...,
-  "created_at": 1715000000, // Timestamp of THIS event object
-  "content": "...",
-  "tags": [
-    ["d", "..."], // Unique ID
-    ["title", "..."],
-    ["published_at", "..."], // Timestamp of first publication
-  ],
-  "pubkey": "...",
-  "id": "...", // ID of this specific event
-  "sig": "..."
-}
-```
+In `NOSTR.md`.
 
 
