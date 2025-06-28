@@ -10,6 +10,7 @@
 
 
 **Tag Structure:**
+Use all tags from `STANDARD.md` and the following Nostr-specific tags that make interacting with the Nostr events easier.
 
 | Tag           | Value Type             | Required? | Purpose & Notes                                            | NIP-99 Standard? |
 |---------------|------------------------|-----------|------------------------------------------------------------|-----------------|
