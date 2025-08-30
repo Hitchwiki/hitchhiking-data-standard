@@ -3,7 +3,7 @@
 | Nostr Key           | Value Type             | Required? | Purpose & Notes                                           
 |---------------|------------------------|-----------|------------------------------------------------------------|
 | `kind`           | Int    | Yes  | `36820` |       
-| `created_at`           | .    | Yes   | Has to be equivalent to the time in `submission_time` tag. |              
+| `created_at`           | .    | Yes   | Has to be equivalent to the time in `submission_time` field in `content`. |              
 | `content`           | String   | Yes   | A json objects using the tags from `STANDARD.md`. At least the `required` tags have to be present and not-null. For tags where no information is given for a ride simply leave the tag out (do not use null values). |
 | `pubkey`           | .    | Yes   | . |              
 | `id`           | .    | Yes   | . |              
