@@ -4,7 +4,7 @@
 |---------------|------------------------|-----------|------------------------------------------------------------|
 | `kind`           | Int    | Yes  | . |       
 | `created_at`           | .    | Yes   | Has to be equivalent to the time in `submission_time` tag. |              
-| `content`           | String   | Yes   | Has to be equal to `comment` tag value. |
+| `content`           | String   | Yes   | A json objects using the tags from `STANDARD.md`. At least the `required` tags have to be present and not-null. For tags where no information is given for a ride simply leave the tag out (do not use null values). |
 | `pubkey`           | .    | Yes   | . |              
 | `id`           | .    | Yes   | . |              
 | `sec`           | .    | Yes   | . |              
@@ -12,7 +12,7 @@
 
 
 # Tag Structure
-Use all tags from `STANDARD.md` and the following Nostr-specific tags that make interacting with the Nostr events easier.
+Use the following Nostr-specific tags that make interacting with the Nostr events easier.
 
 | Tag           | Value Type             | Required? | Purpose & Notes                                            | NIP-99 Standard? |
 |---------------|------------------------|-----------|------------------------------------------------------------|-----------------|
