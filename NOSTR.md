@@ -17,7 +17,7 @@ Use the following Nostr-specific tags that make interacting with the Nostr event
 | Tag           | Value Type             | Required? | Purpose & Notes                                            | NIP-99 Standard? |
 |---------------|------------------------|-----------|------------------------------------------------------------|-----------------|
 | `d`           | String (UUID rec.)     | Yes   | Unique identifier for the specific ride listing/request. Prevents duplicates, enables updates/deletion. | Yes             |
-| `g`           | String (Geohash Prefix)| Yes       | Cascading **origin** geohash (rec. up to len 6) for area filtering. Has to be equivalent to the loaction of the first `stop` object in the `stops` tag (the starting location). | Yes             |
+| `g`           | String (Geohash Prefix)| Yes       | **Origin** geohash (up to length 6) for area filtering. Has to be equivalent to the loaction of the first `stop` object in the `stops` field in `content` (the starting location). | Yes             |
 
 # Example Nostr event
 
