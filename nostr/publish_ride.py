@@ -5,12 +5,8 @@ transform it into the defined standard and to post it to Nostr so that others ca
 """
 
 import sys
-import os
-import wget
 
-import sqlite3
 import pandas as pd
-from tqdm import tqdm
 
 sys.path.append("../python")
 
