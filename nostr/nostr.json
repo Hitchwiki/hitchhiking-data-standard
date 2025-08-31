@@ -1,0 +1,147 @@
+{
+    "kind": 36820,
+    "created_at": 1751231417, // Timestamp of THIS event object
+    "content": {
+        "version": "0.0.0",
+        "stops": [
+            {
+                "arrival_time": null,
+                "departure_time": null,
+                "location": {
+                    "is_exact": true,
+                    "latitude": 32.0727564373025,
+                    "longitude": 34.7934436798096
+                },
+                "waiting_duration": null
+            }
+        ],
+        "rating": 4,
+        "hitchhikers": [
+            {
+                "nickname": "Alice",
+                "hitchhiking_since": 2019,
+                "origin_location": "Milano",
+                "origin_country": "IT",
+                "year_of_birth": 2000,
+                "gender": "prefer_not_to_say",
+                "languages": [
+                    "ita",
+                    "fra"
+                ],
+                "was_driver": false
+            },
+            {
+                "nickname": "Anonymous",
+                "gender": "male"
+            }
+        ],
+        "comment": "A couple picked me up on their way to Southern Italy.",
+        "signals": [
+            {
+                "methods": [
+                    "thumb",
+                    "sign"
+                ],
+                "sign_content": "Straßburg - Strasbourg",
+                "sign_languages": [
+                    "deu",
+                    "fra"
+                ],
+                "total_solicited": 100,
+                "duration": "30M"
+            },
+            {
+                "methods": [
+                    "asking"
+                ],
+                "asking_content": "Are you driving towards Strasbourg?",
+                "asking_languages": [
+                    "eng"
+                ],
+                "total_solicited": 10,
+                "duration": "60M"
+            }
+        ],
+        "occupants": [
+            {
+                "reason_to_pick_up": [
+                    "was_hitchhiker",
+                    "environmental",
+                    "sympathy"
+                ],
+                "origin_location": "Paris",
+                "origin_country": "FR",
+                "year_of_birth": 1980,
+                "gender": "male",
+                "languages": [
+                    "eng",
+                    "fra"
+                ],
+                "was_driver": true
+            },
+            {
+                "was_driver": false
+            }
+        ],
+        "mode_of_transportation": {
+            "kind": "car",
+            "make": "Toyota",
+            "model": "Corolla",
+            "license_plate_country": "DE",
+            "license_plate_identifier": "B"
+        },
+        "ride": {
+            "vehicle_destination": {
+                "latitude": 52.5580333,
+                "longitude": 11.2675331,
+                "is_exact": true
+            },
+            "reasons": [
+                "commute"
+            ]
+        },
+        "declined_rides": [
+            {
+                "destination": {
+                    "latitude": 52.4680333,
+                    "longitude": 13.2675331,
+                    "is_exact": false
+                },
+                "reasons": [
+                    "wrong_direction",
+                    "safety_concern"
+                ]
+            },
+            {
+                "destination": {
+                    "latitude": 52.0680333,
+                    "longitude": 12.5435331,
+                    "is_exact": true
+                },
+                "reasons": [
+                    "too_slow"
+                ]
+            }
+        ],
+        "source": "liftershalte.info",
+        "license": "cc-by-sa-4.0",
+        "submission_time": "2025-05-19T17:39:57-08:00[America/Los_Angeles]"
+    }, // Has to be dumped as a string
+    "tags": [
+        [
+            "d",
+            "liftershalte.info-7852e9df-ffd6-45dc-a164-b81f006254f0"
+        ], // Unique ID
+        [
+            "g",
+            "sv8wrwxv6"
+        ], // Origin geohash
+        [
+            "published_at",
+            "1751231417"
+        ], // Timestamp of first publication
+    ],
+    "pubkey": "d17ff51bfc32d49217e8cb5bfa558a5a78e6cbe3ea4d947acbc7f11ca5c5dbd5",
+    "id": "dae98bbe6d790463931c32f31178e691ffd1300c44e2f026c5f2933e85362da8", // ID of this specific event
+    "sig": "3dfaf7a1377414634ada1e3a1277ce8ebf5ddf24e3e7985ae70ce019f43d2df7c03b7ae5225cca0a476b72a3fc2c8906c438df5afd818abdd5c1c9bc8b68dba4"
+}

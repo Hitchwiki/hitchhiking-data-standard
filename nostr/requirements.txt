@@ -1,0 +1,8 @@
+dotenv==0.9.9
+geohash2==1.1
+pandas==2.3.0
+pydantic==2.11.7
+pynostr==0.6.2
+requests==2.32.4
+tqdm==4.67.1
+wget==3.2
