@@ -144,6 +144,7 @@ class Stop(BaseModel):
 
 
 class HitchhikingRecord(BaseModel):
+    version: str = Field(...)
     stops: List[Stop] = Field(..., min_items=1)
     rating: Optional[int] = Field(None, ge=1, le=5)
     hitchhikers: List[Hitchhiker] = Field(..., min_items=1)
