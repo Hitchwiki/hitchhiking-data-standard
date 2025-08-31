@@ -2,6 +2,7 @@
 An example of how to take a present dataset of hitchhiking rides,
 transform it into the defined standard and to post it to Nostr so that others can access it.
 """
+
 import sys
 import os
 import wget
@@ -13,17 +14,23 @@ from tqdm import tqdm
 sys.path.append("../python")
 
 from utils.post_hitchhiking_ride_to_nostr import HitchhikingDataStandardToNostrPoster
-from hitchhiking_data_standard_pydantic_model import Hitchhiker, HitchhikingRecord, Location, Signal, Stop
+from hitchhiking_data_standard_pydantic_model import (
+    Hitchhiker,
+    HitchhikingRecord,
+    Location,
+    Signal,
+    Stop,
+)
 
 ### Load your dataset of past hitchhiking rides
 
-url = 'https://hitchmap.com/dump.sqlite'
-filename = 'dump.sqlite'
+url = "https://hitchmap.com/dump.sqlite"
+filename = "dump.sqlite"
 if os.path.exists(filename):
-        os.remove(filename)
+    os.remove(filename)
 filename = wget.download(url)
-fn = 'dump.sqlite'
-points = pd.read_sql('select * from points where not banned', sqlite3.connect(fn))
+fn = "dump.sqlite"
+points = pd.read_sql("select * from points where not banned", sqlite3.connect(fn))
 points["datetime"] = points["datetime"].astype("datetime64[ns]")
 
 ### Clean your dataset from issues that your are already aware of
@@ -47,11 +54,14 @@ with_date = points[~points["datetime"].isna()]
 
 lift = pd.concat([no_date, with_date[with_date["datetime"] < "2010-08-11"]])
 
-wiki = with_date[(with_date["datetime"] >= "2010-08-11") & (with_date["datetime"] < "2022-10-13")]
+wiki = with_date[
+    (with_date["datetime"] >= "2010-08-11") & (with_date["datetime"] < "2022-10-13")
+]
 
 hitchmap = with_date[with_date["datetime"] >= "2022-10-13"]
 
 ### Define functions that create the objects demanded by this standard from the possibly unique data that is used in your dataset
+
 
 def map_signal(signal: str) -> Signal:
     if not signal:
@@ -80,21 +90,32 @@ def map_signal(signal: str) -> Signal:
 ### Define one function that takes single rides from your dataset and builds objects that follow this standard from them
 ### Again, here the function is a bit special because we are dealing with multiple datasets actually
 
-def create_record_from_row(row: pd.Series, source: str, license: str, rating_formula= lambda x: x) -> HitchhikingRecord:
+
+def create_record_from_row(
+    row: pd.Series, source: str, license: str, rating_formula=lambda x: x
+) -> HitchhikingRecord:
     stops = [
         Stop(
             location=Location(latitude=row["lat"], longitude=row["lon"], is_exact=True),
-            arrival_time=row["ride_datetime"].strftime("%Y-%m-%dT%H:%M:%S") if pd.notna(row["ride_datetime"]) else None,
-            departure_time=(row["ride_datetime"] + pd.to_timedelta(row["wait"], unit="m")).strftime(
-                "%Y-%m-%dT%H:%M:%S"
-            )
-            if pd.notna(row["ride_datetime"]) and pd.notna(row["wait"])
+            arrival_time=None,
+            departure_time=(row["ride_datetime"]).strftime("%Y-%m-%dT%H:%M:%S")
+            if pd.notna(row["ride_datetime"])
             else None,
             waiting_duration=f"{int(row['wait'])}M" if pd.notna(row["wait"]) else None,
         ),
     ]
     if pd.notna(row["dest_lat"]) and pd.notna(row["dest_lon"]):
-        stops.append(Stop(location=Location(latitude=row["dest_lat"], longitude=row["dest_lon"], is_exact=False)))
+        stops.append(
+            Stop(
+                location=Location(
+                    latitude=row["dest_lat"], longitude=row["dest_lon"], is_exact=False
+                )
+            )
+        )
+
+    signals = [map_signal(row["signal"])] if row["signal"] else None
+    if len(signals) == 1 and pd.notna(row["wait"]):
+        signals = [Signal(methods=["sign"], duration=f"{row['wait']}M")]
 
     record = HitchhikingRecord(
         version="0.0.0",
@@ -106,17 +127,20 @@ def create_record_from_row(row: pd.Series, source: str, license: str, rating_for
             )
         ],
         comment=row["comment"],
-        signals=[map_signal(row["signal"])] if row["signal"] else None,
+        signals=signals,
         occupants=None,
         mode_of_transportation=None,
         ride=None,
         declined_rides=None,
         source=source,
         license=license,
-        submission_time=row["datetime"].strftime("%Y-%m-%dT%H:%M:%S") if pd.notna(row["datetime"]) else None,
+        submission_time=row["datetime"].strftime("%Y-%m-%dT%H:%M:%S")
+        if pd.notna(row["datetime"])
+        else None,
     )
 
     return record
+
 
 ### Collect the records that are now in the desired format
 

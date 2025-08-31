@@ -15,6 +15,7 @@ To establish this standard and to propose new features of hitchhiking rides that
 - create a new issue called "Proposal: xxx", stating which new dimenion of hitchhiking you want to add to the already existing standard or how you would extend or change it to better capture the reality of hitchhiking in more detail.
 - find a consensus about how to make the proposal happen - the discussion should be about the how rather than the if as applications will decide independently whether they and their user base will be able to record this new feature
 - if a consensus is reached document it in `STANDARD.md`, another file named `object_name.md` might be used to define more complex objects.
+- also adapt the python validation object in `python/python.py` to your change.
 - close the proposal issue with a `accepted` comment and if a `object_name.md` add an `Approved` checkbox to it.
 - inform applications like `hitchmap.com` about the extension/ change of the standard to make it come alife.
 

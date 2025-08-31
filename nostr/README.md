@@ -10,7 +10,7 @@ To mitigate data duplication and data being injected into "our" ecosystem from o
 
 `publish_past_rides.py` ... shows an example of how to take a present dataset of hitchhiking rides, transform it into the defined standard and to post it to Nostr so that others can access it. You might have to adapt a few things for your own dataset. You might have to adapt a few more things to do this in another language than python.
 
-`publish_ride.py` ... shows an example of how to take a ride that was just recorded e.g. on a hitchhiking application with opionionated fields that were collected by the application, transform it into the defined standard and to post it to Nostr so that others can access it.
+`publish_ride.py` ... shows an example of how to take a ride that was just recorded e.g. on a hitchhiking application with opinionated fields that were collected by the application, transform it into the defined standard and to post it to Nostr so that others can access it.
 
 To get started with those script you need to set up the python evironment as follows:
 
