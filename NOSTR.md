@@ -16,7 +16,7 @@ Use the following Nostr-specific tags that make interacting with the Nostr event
 
 | Tag           | Value Type             | Required? | Purpose & Notes                                            | NIP-99 Standard? |
 |---------------|------------------------|-----------|------------------------------------------------------------|-----------------|
-| `d`           | String (UUID rec.)     | Yes   | Unique identifier for the specific ride. Prevents duplicates, enables updates/deletion. | Yes             |
+| `d`           | String (UUID recommended)     | Yes   | Unique identifier for the specific ride. Prevents duplicates, enables updates/deletion. By posting a new event with the same d tag its content can be changed - the older version of the event may be discarded by relays. Each application posting hitchhiking events can come up with their own schema, it is recommended to use `source`-`version 4 UUID`. | Yes             |
 | `g`           | String (Geohash Prefix)| Yes       | **Origin** geohash (at least of length 10) for area filtering. Has to be equivalent to the loaction of the first `stop` object in the `stops` field in `content` (the starting location). | Yes    
 | `published_at`           | String (UNIX timestamp) | Yes       | The timestamp (in unix seconds – converted to string) of the first version of this ride that was published as a Nostr event. If a `source` application directly posts events to Nostr this is equivalent to the time in `submission_time` field in `content`. | Yes           |
 | `expiration`           | int| No       | If you are still testing and playing around with Nostr events set this to `0`. Otherwise this tag is not needed. | -             |
