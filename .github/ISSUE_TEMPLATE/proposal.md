@@ -3,7 +3,7 @@ name: Proposal
 about: Propose an extension of the standard that means adding a new tag or extending
   a present tag.
 title: 'Proposal: xxx'
-labels: ''
+labels: Proposal
 assignees: ''
 
 ---
