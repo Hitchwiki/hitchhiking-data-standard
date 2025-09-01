@@ -46,9 +46,10 @@ class HitchhikingDataStandardToNostrPoster:
 
         start_location = ride_record.stops[0].location
 
-        geohash = geohash2.encode(start_location.latitude, start_location.longitude, precision=10)
-
         unix_timestamp_now = int(time.time())
+
+        # Create cascading geohash tags for each precision from 1 to 10
+        geohash_tags = [["g", geohash2.encode(start_location.latitude, start_location.longitude, precision=p)] for p in range(1, 11)]
 
         event = Event(
             kind=self.event_kind,
@@ -58,10 +59,10 @@ class HitchhikingDataStandardToNostrPoster:
             id=f"{ride_record.source}-{uuid.uuid4()}",
             sig=None,  # Signature will be added later
             tags=[
-                ["expiration", str(unix_timestamp_now + 3600)],  # Expiration time set to 1 hour from now
-                ["d", f"{ride_record.source}-{uuid.uuid4()}"],
-                ["g", str(geohash)],
-                ["published_at", str(unix_timestamp_now)]
+            ["expiration", str(unix_timestamp_now + 3600)],  # Expiration time set to 1 hour from now
+            ["d", f"{ride_record.source}-{uuid.uuid4()}"],
+            *geohash_tags,
+            ["published_at", str(unix_timestamp_now)]
             ]
         )
 
