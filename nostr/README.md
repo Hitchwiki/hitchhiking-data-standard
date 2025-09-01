@@ -4,7 +4,7 @@ To mitigate data duplication and data being injected into "our" ecosystem from o
 
 | npub         | sources            |                                           
 |---------------|------------------------|
-| Till | liftershalte.info, hitchmap.com, hitchwiki.org |
+| `d17ff51bfc32d49217e8cb5bfa558a5a78e6cbe3ea4d947acbc7f11ca5c5dbd5` | liftershalte.info, hitchmap.com, hitchwiki.org |
 
 # Examples
 
