@@ -134,6 +134,42 @@
         ], // Unique ID
         [
             "g",
+            "s"
+        ],
+        [
+            "g",
+            "sv"
+        ],
+        [
+            "g",
+            "sv8"
+        ],
+        [
+            "g",
+            "sv8w"
+        ],
+        [
+            "g",
+            "sv8wr"
+        ],
+        [
+            "g",
+            "sv8wrw"
+        ],
+        [
+            "g",
+            "sv8wrw"
+        ],
+        [
+            "g",
+            "sv8wrwx"
+        ],
+        [
+            "g",
+            "sv8wrwxv"
+        ],
+        [
+            "g",
             "sv8wrwxv6"
         ], // Origin geohash
         [
