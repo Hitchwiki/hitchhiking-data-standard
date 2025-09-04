@@ -26,13 +26,13 @@ const relayUrls = [
 //     console.log(ev.content);
 // }
 
-// fetches all text events since 24 hr ago, as a single array
+// fetches all text events since 10000 hr ago, as a single array
 const allPosts = await fetcher.fetchAllEvents(
     relayUrls,
     /* filter */
     { kinds: [ 36820 ] },
     /* time range filter */
-    { since: nHoursAgo(1) },
+    { since: nHoursAgo(10000) },
     /* fetch options (optional) */
     { sort: true }
 )
@@ -40,12 +40,13 @@ const allPosts = await fetcher.fetchAllEvents(
 console.log(allPosts.length, "posts fetched");
 
 // Prepare CSV header and rows
-const header = ["id", "pubkey", "created_at", "content"];
+const header = ["id", "pubkey", "created_at", "content", "tags"];
 const rows = allPosts.map(post => [
     post.id,
     post.pubkey,
     post.created_at,
-    JSON.stringify(post.content)
+    JSON.stringify(post.content),
+    JSON.stringify(post.tags)
 ]);
 
 // Combine header and rows into CSV string
@@ -56,9 +57,5 @@ const csv = [header, ...rows]
 // Write CSV to file
 writeFileSync("allPosts.csv", csv);
 console.log("CSV written to allPosts.csv");
-
-// for (const post of allPosts) {
-//     console.log(post.content);
-// }
 
 process.exit(0);
