@@ -1,3 +1,4 @@
+# From https://github.com/Hitchwiki/hitchhiking-data-standard/blob/main/nostr/publish_past_rides.py
 """
 An example of how to take a present dataset of hitchhiking rides,
 transform it into the defined standard and to post it to Nostr so that others can access it.
