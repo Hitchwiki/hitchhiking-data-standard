@@ -1,3 +1,4 @@
+# From https://github.com/Hitchwiki/hitchhiking-data-standard/blob/main/nostr/publish_ride.py
 """
 An example of how to take a ride that was just recorded
 e.g. on a hitchhiking application with opinionated fields that were collected by the application,
