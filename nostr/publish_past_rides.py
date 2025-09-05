@@ -116,7 +116,7 @@ def create_record_from_row(
 
     signals = [map_signal(row["signal"])] if row["signal"] else None
     if signals is not None and len(signals) == 1 and pd.notna(row["wait"]):
-        signals = [Signal(methods=["sign"], duration=f"PT{row['wait']}M")]
+        signals = [Signal(methods=["sign"], duration=f"PT{int(row['wait'])}M")]
 
     record = HitchhikingRecord(
         version="0.0.0",
