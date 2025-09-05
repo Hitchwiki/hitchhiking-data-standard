@@ -3,6 +3,7 @@
 Class to allow posting hitchhiking rides in the standardized format to Nostr.
 If you are certain that you want to permanantly publish the rides remove the expiration tag from the Nostr event.
 """
+
 import time
 import uuid
 import sys
@@ -41,34 +42,42 @@ class HitchhikingDataStandardToNostrPoster:
         self.event_kind = 36820  # Event kind for hitchhiking notes
 
     def post(self, ride_record: HitchhikingRecord):
-
         content = ride_record.model_dump_json(exclude_none=True, by_alias=True)
- 
 
         start_location = ride_record.stops[0].location
 
         unix_timestamp_now = int(time.time())
 
         # Create cascading geohash tags for each precision from 1 to 10
-        geohash_tags = [["g", geohash2.encode(start_location.latitude, start_location.longitude, precision=p)] for p in range(1, 11)]
+        geohash_tags = [
+            [
+                "g",
+                geohash2.encode(
+                    start_location.latitude, start_location.longitude, precision=p
+                ),
+            ]
+            for p in range(1, 11)
+        ]
 
         event = Event(
             kind=self.event_kind,
             created_at=unix_timestamp_now,
             content=content,
             pubkey=self.npub,
-            id=f"{ride_record.source}-{uuid.uuid4()}",
+            id=None,  # ID will be computed later
             sig=None,  # Signature will be added later
             tags=[
-            ["expiration", str(unix_timestamp_now + 360000)],  # Expiration time set to 100 hours from now
-            ["d", f"{ride_record.source}-{uuid.uuid4()}"],
-            *geohash_tags,
-            ["published_at", str(unix_timestamp_now)]
-            ]
+                [
+                    "expiration",
+                    str(unix_timestamp_now + 360000),
+                ],  # Expiration time set to 100 hours from now
+                ["d", f"{ride_record.source}-{uuid.uuid4()}"],
+                *geohash_tags,
+                ["published_at", str(unix_timestamp_now)],
+            ],
         )
 
         event.sign(self.private_key_hex)
-
 
         if POST_TO_RELAYS:
             print("posting to relays")
