@@ -59,7 +59,7 @@ class HitchhikingDataStandardToNostrPoster:
             id=f"{ride_record.source}-{uuid.uuid4()}",
             sig=None,  # Signature will be added later
             tags=[
-            ["expiration", str(unix_timestamp_now + 3600)],  # Expiration time set to 1 hour from now
+            ["expiration", str(unix_timestamp_now + 360000)],  # Expiration time set to 100 hours from now
             ["d", f"{ride_record.source}-{uuid.uuid4()}"],
             *geohash_tags,
             ["published_at", str(unix_timestamp_now)]

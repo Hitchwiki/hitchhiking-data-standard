@@ -114,7 +114,7 @@ def create_record_from_row(
         )
 
     signals = [map_signal(row["signal"])] if row["signal"] else None
-    if len(signals) == 1 and pd.notna(row["wait"]):
+    if signals is not None and len(signals) == 1 and pd.notna(row["wait"]):
         signals = [Signal(methods=["sign"], duration=f"{row['wait']}M")]
 
     record = HitchhikingRecord(
@@ -176,7 +176,7 @@ for _, row in tqdm(hitchmap.iterrows(), total=len(hitchmap)):
 ### Post your records to the Nostr protocol to publish them
 
 poster = HitchhikingDataStandardToNostrPoster()
-for record in hitchhiking_records[-10:]:
+for record in hitchhiking_records[-100:]:
     poster.post(ride_record=record)
 
 poster.close()

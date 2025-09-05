@@ -95,7 +95,7 @@ def create_record_from_custom_object(
         )
 
     signals = [map_signal(custom_object["signal"])] if custom_object["signal"] else None
-    if len(signals) == 1 and pd.notna(custom_object["wait"]):
+    if signals is not None and len(signals) == 1 and pd.notna(custom_object["wait"]):
         signals = [
             Signal(methods=signals[0].methods, duration=f"{custom_object['wait']}M")
         ]
