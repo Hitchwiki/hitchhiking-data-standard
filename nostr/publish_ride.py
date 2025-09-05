@@ -3,6 +3,7 @@ An example of how to take a ride that was just recorded
 e.g. on a hitchhiking application with opinionated fields that were collected by the application,
 transform it into the defined standard and to post it to Nostr so that others can access it.
 """
+
 import sys
 
 import pandas as pd
@@ -73,7 +74,7 @@ def create_record_from_custom_object(
                 is_exact=True,
             ),
             arrival_time=None,
-            departure_time=(custom_object["datetime_ride"]).strftime(
+            departure_time=pd.to_datetime(custom_object["datetime_ride"]).strftime(
                 "%Y-%m-%dT%H:%M:%S"
             )
             if pd.notna(custom_object["datetime_ride"])

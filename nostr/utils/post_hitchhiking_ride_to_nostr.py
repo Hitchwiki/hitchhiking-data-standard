@@ -12,7 +12,7 @@ sys.path.append("../python")
 
 from pynostr.key import PrivateKey
 from pynostr.relay_manager import RelayManager
-from pynostr.event import Event, EventKind
+from pynostr.event import Event
 import geohash2
 from dotenv import load_dotenv
 
