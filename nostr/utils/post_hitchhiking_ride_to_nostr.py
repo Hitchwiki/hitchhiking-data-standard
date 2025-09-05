@@ -1,3 +1,4 @@
+# From https://github.com/Hitchwiki/hitchhiking-data-standard/blob/main/nostr/utils/post_hitchhiking_ride_to_nostr.py
 """
 Class to allow posting hitchhiking rides in the standardized format to Nostr.
 If you are certain that you want to permanantly publish the rides remove the expiration tag from the Nostr event.
