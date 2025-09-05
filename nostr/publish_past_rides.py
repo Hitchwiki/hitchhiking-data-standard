@@ -101,7 +101,7 @@ def create_record_from_row(
             departure_time=(row["ride_datetime"]).strftime("%Y-%m-%dT%H:%M:%S")
             if pd.notna(row["ride_datetime"])
             else None,
-            waiting_duration=f"{int(row['wait'])}M" if pd.notna(row["wait"]) else None,
+            waiting_duration=f"PT{int(row['wait'])}M" if pd.notna(row["wait"]) else None,
         ),
     ]
     if pd.notna(row["dest_lat"]) and pd.notna(row["dest_lon"]):
@@ -115,7 +115,7 @@ def create_record_from_row(
 
     signals = [map_signal(row["signal"])] if row["signal"] else None
     if signals is not None and len(signals) == 1 and pd.notna(row["wait"]):
-        signals = [Signal(methods=["sign"], duration=f"{row['wait']}M")]
+        signals = [Signal(methods=["sign"], duration=f"PT{row['wait']}M")]
 
     record = HitchhikingRecord(
         version="0.0.0",

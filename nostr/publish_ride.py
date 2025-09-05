@@ -80,7 +80,7 @@ def create_record_from_custom_object(
             )
             if pd.notna(custom_object["datetime_ride"])
             else None,
-            waiting_duration=f"{int(custom_object['wait'])}M"
+            waiting_duration=f"PT{int(custom_object['wait'])}M"
             if pd.notna(custom_object["wait"])
             else None,
         ),
@@ -99,7 +99,7 @@ def create_record_from_custom_object(
     signals = [map_signal(custom_object["signal"])] if custom_object["signal"] else None
     if signals is not None and len(signals) == 1 and pd.notna(custom_object["wait"]):
         signals = [
-            Signal(methods=signals[0].methods, duration=f"{custom_object['wait']}M")
+            Signal(methods=signals[0].methods, duration=f"PT{custom_object['wait']}M")
         ]
 
     now = pd.Timestamp.now()

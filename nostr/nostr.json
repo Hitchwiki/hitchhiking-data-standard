@@ -48,7 +48,7 @@
                     "fra"
                 ],
                 "total_solicited": 100,
-                "duration": "30M"
+                "duration": "PT30M"
             },
             {
                 "methods": [
@@ -59,7 +59,7 @@
                     "eng"
                 ],
                 "total_solicited": 10,
-                "duration": "60M"
+                "duration": "PT60M"
             }
         ],
         "occupants": [
