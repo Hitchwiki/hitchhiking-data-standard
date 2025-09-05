@@ -1,3 +1,4 @@
+// From https://github.com/Hitchwiki/hitchhiking-data-standard/blob/main/nostr/fetch_hitchhiking_events/src/index.ts
 import WebSocket from "ws";
 import { NostrFetcher } from "nostr-fetch";
 import { writeFileSync } from "fs";

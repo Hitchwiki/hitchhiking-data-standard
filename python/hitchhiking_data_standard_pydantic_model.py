@@ -1,3 +1,4 @@
+# From https://github.com/Hitchwiki/hitchhiking-data-standard/blob/main/python/hitchhiking_data_standard_pydantic_model.py
 from pydantic import Field, BaseModel
 from typing import List, Optional, Tuple
 from enum import Enum
