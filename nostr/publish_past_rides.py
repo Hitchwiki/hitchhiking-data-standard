@@ -176,8 +176,12 @@ for _, row in tqdm(hitchmap.iterrows(), total=len(hitchmap)):
 
 ### Post your records to the Nostr protocol to publish them
 
+print(f"Total records to publish: {len(hitchhiking_records)}")
+
 poster = HitchhikingDataStandardToNostrPoster()
-for record in hitchhiking_records[-100:]:
-    poster.post(ride_record=record)
+
+# Use batch processing for much faster publishing
+# Adjust batch_size based on your relay capacity (100-500 works well)
+poster.post_batch(hitchhiking_records, batch_size=200)
 
 poster.close()

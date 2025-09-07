@@ -9,6 +9,7 @@ import uuid
 import sys
 import os
 import ast
+from tqdm import tqdm
 
 sys.path.append("../python")
 
@@ -41,7 +42,7 @@ class HitchhikingDataStandardToNostrPoster:
 
         self.event_kind = 36820  # Event kind for hitchhiking notes
 
-    def post(self, ride_record: HitchhikingRecord):
+    def create_event(self, ride_record: HitchhikingRecord):
         content = ride_record.model_dump_json(exclude_none=True, by_alias=True)
 
         start_location = ride_record.stops[0].location
@@ -78,17 +79,54 @@ class HitchhikingDataStandardToNostrPoster:
         )
 
         event.sign(self.private_key_hex)
+        return event
+
+    def post(self, ride_record: HitchhikingRecord):
+        event = self.create_event(ride_record)
 
         if POST_TO_RELAYS:
-            print("posting to relays")
             self.relay_manager.publish_event(event)
-            self.relay_manager.run_sync()  # Sync with the relay to send the event
-            print("posted, waiting a bit")
-            time.sleep(5)
+            self.relay_manager.run_sync()
 
-            while self.relay_manager.message_pool.has_ok_notices():
-                ok_msg = self.relay_manager.message_pool.get_ok_notice()
-                print(ok_msg)
+    def post_batch(self, ride_records: list[HitchhikingRecord], batch_size: int = 100):
+        """Post multiple records efficiently in batches"""
+        if not POST_TO_RELAYS:
+            print("POST_TO_RELAYS is disabled, skipping publishing")
+            return
+
+        total_records = len(ride_records)
+        print(f"Publishing {total_records} records in batches of {batch_size}")
+        print(f"Estimated time: ~{(total_records / batch_size * 0.2):.1f} seconds")
+        
+        published_count = 0
+        
+        for i in tqdm(range(0, total_records, batch_size), desc="Publishing batches"):
+            batch = ride_records[i:i + batch_size]
+            
+            try:
+                # Create and queue all events in the batch
+                for record in batch:
+                    event = self.create_event(record)
+                    self.relay_manager.publish_event(event)
+                
+                # Send the batch
+                self.relay_manager.run_sync()
+                published_count += len(batch)
+                
+                # Process any OK notices without blocking
+                processed_notices = 0
+                while self.relay_manager.message_pool.has_ok_notices() and processed_notices < batch_size:
+                    self.relay_manager.message_pool.get_ok_notice()
+                    processed_notices += 1
+                
+                # Brief pause between batches to avoid overwhelming relays
+                time.sleep(0.1)
+                
+            except Exception as e:
+                print(f"Error publishing batch {i//batch_size + 1}: {e}")
+                continue
+        
+        print(f"Successfully published {published_count}/{total_records} records")
 
     def close(self):
         self.relay_manager.close_all_relay_connections()
