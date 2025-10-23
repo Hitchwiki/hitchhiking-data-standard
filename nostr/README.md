@@ -31,7 +31,7 @@ You and other people have published their hitchhiking rides using the Nostr prot
 
 | Nostr Key           | Value Type             | Required? | Purpose & Notes                                           
 |---------------|------------------------|-----------|------------------------------------------------------------|
-| `kind`           | Int    | Yes  | `36820` |       
+| `kind`           | Int    | Yes  | `34242` |       
 | `created_at`           | Int   | Yes   | unix timestamp in seconds     
 | `content`           | String   | Yes   | A json object as string using the tags from `STANDARD.md`. At least the `required` tags have to be present and not-null. For tags where no information is given for a ride simply leave the tag out (do not use null values). |
 | `pubkey`           | String    | Yes   | 32-bytes lowercase hex-encoded public key of the event creator. See [NIP-01](https://github.com/nostr-protocol/nips/blob/master/01.md). |              

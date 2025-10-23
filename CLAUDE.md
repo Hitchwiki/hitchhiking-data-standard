@@ -29,7 +29,7 @@ This repository defines a standard for tracking hitchhiking rides, providing:
 - `publish_ride.py`: Publish single ride to Nostr network
 - `publish_past_rides.py`: Bulk publish historical rides
 - `fetch_hitchhiking_events/`: TypeScript tools for retrieving Nostr events
-- Uses Nostr event kind `36820` for hitchhiking records
+- Uses Nostr event kind `34242` for hitchhiking records
 
 ### Key Data Objects
 
@@ -116,7 +116,7 @@ npx tsx index.ts
 - Anonymous hitchhikers use `{"nickname": "Anonymous"}` for privacy
 
 ### Nostr Integration
-- Event kind: `36820`
+- Event kind: `34242`
 - Use `d` tag with UUID for ride identification
 - Use cascading `g` tags with geohash for location filtering
 - Content field contains JSON following the data standard

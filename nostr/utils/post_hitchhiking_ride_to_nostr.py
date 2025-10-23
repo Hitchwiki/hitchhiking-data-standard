@@ -40,7 +40,7 @@ class HitchhikingDataStandardToNostrPoster:
         for relay in RELAYS:
             self.relay_manager.add_relay(relay)
 
-        self.event_kind = 36820  # Event kind for hitchhiking notes
+        self.event_kind = 34242  # Event kind for hitchhiking notes
 
     def create_event(self, ride_record: HitchhikingRecord):
         content = ride_record.model_dump_json(exclude_none=True, by_alias=True)
