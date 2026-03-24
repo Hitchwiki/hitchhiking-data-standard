@@ -1,5 +1,5 @@
 {
-    "kind": 34242,
+    "kind": 36820,
     "created_at": 1751231417, // Timestamp of THIS event object
     "content": {
         "version": "0.0.0",
@@ -122,6 +122,9 @@
                     "too_slow"
                 ]
             }
+        ],
+        "images": [
+            "https://hitchwiki.org/en/File:Agne-from-vilnius-to-radviliskis.jpg"
         ],
         "source": "liftershalte.info",
         "license": "cc-by-sa-4.0",

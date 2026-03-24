@@ -31,7 +31,7 @@ const relayUrls = [
 const allPosts = await fetcher.fetchAllEvents(
     relayUrls,
     /* filter */
-    { kinds: [ 34242 ] },
+    { kinds: [ 36820 ] },
     /* time range filter */
     { since: nHoursAgo(10000) },
     /* fetch options (optional) */

@@ -155,6 +155,7 @@ class HitchhikingRecord(BaseModel):
     mode_of_transportation: Optional[ModeOfTranportation] = None
     ride: Optional[Ride] = None
     declined_rides: Optional[List[DeclinedRide]] = None
+    images: Optional[List[str]] = None  # URLs to images taken during the ride
     source: str = Field(...)
     license: str = Field(...)
     submission_time: Optional[str] = None  # RFC 9557 format
