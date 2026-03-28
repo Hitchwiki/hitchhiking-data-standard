@@ -9,6 +9,8 @@ import uuid
 import sys
 import os
 import ast
+import json
+import sqlite3
 from tqdm import tqdm
 
 sys.path.append("../python")
@@ -68,10 +70,6 @@ class HitchhikingDataStandardToNostrPoster:
             id=None,  # ID will be computed later
             sig=None,  # Signature will be added later
             tags=[
-                [
-                    "expiration",
-                    str(unix_timestamp_now + 360000),
-                ],  # Expiration time set to 100 hours from now
                 ["d", f"{ride_record.source}-{uuid.uuid4()}"],
                 *geohash_tags,
                 ["published_at", str(unix_timestamp_now)],
@@ -127,6 +125,86 @@ class HitchhikingDataStandardToNostrPoster:
                 continue
         
         print(f"Successfully published {published_count}/{total_records} records")
+
+    def _get_expires_at(self, tags: list) -> int | None:
+        for tag in tags:
+            if len(tag) >= 2 and tag[0] == "expiration":
+                try:
+                    return int(tag[1])
+                except (ValueError, IndexError):
+                    pass
+        return None
+
+    def _write_event_to_db(self, event, conn: sqlite3.Connection):
+        """Write a single signed pynostr Event to the relay SQLite database."""
+        event_dict = event.to_dict()
+        content_json = json.dumps(event_dict, separators=(',', ':'))
+
+        event_hash = bytes.fromhex(event_dict["id"])
+        author = bytes.fromhex(event_dict["pubkey"])
+        first_seen = int(time.time())
+        created_at = event_dict["created_at"]
+        kind = event_dict["kind"]
+        expires_at = self._get_expires_at(event_dict["tags"])
+
+        cursor = conn.cursor()
+        cursor.execute(
+            """INSERT OR IGNORE INTO event
+               (event_hash, first_seen, created_at, expires_at, author, delegated_by, kind, hidden, content)
+               VALUES (?, ?, ?, ?, ?, NULL, ?, 0, ?)""",
+            (event_hash, first_seen, created_at, expires_at, author, kind, content_json),
+        )
+        event_row_id = cursor.lastrowid
+
+        # Only insert tags if the event was actually inserted (not a duplicate)
+        if event_row_id:
+            for tag in event_dict["tags"]:
+                if len(tag) < 2:
+                    continue
+                name = tag[0]
+                value = tag[1]
+                # Store binary blob in value_hex if the value is a valid hex string
+                value_hex = None
+                if isinstance(value, str) and len(value) % 2 == 0:
+                    try:
+                        value_hex = bytes.fromhex(value)
+                    except ValueError:
+                        pass
+                cursor.execute(
+                    """INSERT INTO tag (event_id, name, value, value_hex, created_at, kind)
+                       VALUES (?, ?, ?, ?, ?, ?)""",
+                    (event_row_id, name, value, value_hex, created_at, kind),
+                )
+
+    def post_to_db(self, ride_record: HitchhikingRecord, db_path: str):
+        """Create an event from a ride record and write it directly to the relay database."""
+        event = self.create_event(ride_record)
+        conn = sqlite3.connect(db_path)
+        try:
+            self._write_event_to_db(event, conn)
+            conn.commit()
+        finally:
+            conn.close()
+
+    def post_batch_to_db(self, ride_records: list[HitchhikingRecord], db_path: str, batch_size: int = 1000):
+        """Write multiple ride records directly to the relay database in batches."""
+        total = len(ride_records)
+        print(f"Writing {total} records directly to database: {db_path}")
+        conn = sqlite3.connect(db_path)
+        written = 0
+        try:
+            for i in tqdm(range(0, total, batch_size), desc="Writing to DB"):
+                batch = ride_records[i:i + batch_size]
+                for record in batch:
+                    try:
+                        self._write_event_to_db(self.create_event(record), conn)
+                        written += 1
+                    except Exception as e:
+                        print(f"Error writing record: {e}")
+                conn.commit()
+        finally:
+            conn.close()
+        print(f"Successfully wrote {written}/{total} records")
 
     def close(self):
         self.relay_manager.close_all_relay_connections()
