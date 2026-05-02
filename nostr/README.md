@@ -5,7 +5,7 @@ To mitigate data duplication and data being injected into "our" ecosystem from o
 | npub         | sources            | Who is responsible?|                                    
 |---------------|------------------------|---|
 | `d17ff51bfc32d49217e8cb5bfa558a5a78e6cbe3ea4d947acbc7f11ca5c5dbd5` | liftershalte.info, hitchwiki.org, hitchmap.com (until 2026/03/31) | @tillwenke |
-| `d17ff51bfc32d49217e8cb5bfa558a5a78e6cbe3ea4d947acbc7f11ca5c5dbd5` | maps.hitchwiki.org | @tillwenke |
+| `d17ff51bfc32d49217e8cb5bfa558a5a78e6cbe3ea4d947acbc7f11ca5c5dbd5`, `npub1vc3mh896ug3qa9x47avpur7eymd46e6n3gy20ucxw68f0r2dzshqsjdppd` | maps.hitchwiki.org | @tillwenke |
 
 # Examples
 
