@@ -1,6 +1,8 @@
 # From https://github.com/Hitchwiki/hitchhiking-data-standard/blob/main/nostr/utils/post_hitchhiking_ride_to_nostr.py
 """
 Class to allow posting hitchhiking rides in the standardized format to Nostr.
+Especially for large bulk upload you should test this uploading procedure by running it with the expiration tag
+described below, verify that all your rides are on the relays and then remove the expiration tag and re-run to upload permanently.
 If you are certain that you want to permanantly publish the rides remove the expiration tag from the Nostr event.
 """
 
@@ -32,6 +34,7 @@ class HitchhikingDataStandardToNostrPoster:
     def __init__(self):
         private_key_obj = PrivateKey.from_nsec(NSEC)
         self.private_key_hex = private_key_obj.hex()
+        self.pubkey_hex = private_key_obj.public_key.hex()
         self.npub = private_key_obj.public_key.bech32()
         print(f"Posting as npub {self.npub}")
 
@@ -64,14 +67,14 @@ class HitchhikingDataStandardToNostrPoster:
             kind=self.event_kind,
             created_at=unix_timestamp_now,
             content=content,
-            pubkey=self.npub,
+            pubkey=self.pubkey_hex,
             id=None,  # ID will be computed later
             sig=None,  # Signature will be added later
             tags=[
                 [
                     "expiration",
-                    str(unix_timestamp_now + 360000),
-                ],  # Expiration time set to 100 hours from now
+                    str(unix_timestamp_now + 3600),
+                ],  # Expiration time set to 1 hours from now
                 ["d", f"{ride_record.source}-{uuid.uuid4()}"],
                 *geohash_tags,
                 ["published_at", str(unix_timestamp_now)],
@@ -83,10 +86,28 @@ class HitchhikingDataStandardToNostrPoster:
 
     def post(self, ride_record: HitchhikingRecord):
         event = self.create_event(ride_record)
+        print(event.to_message())
 
         if POST_TO_RELAYS:
             self.relay_manager.publish_event(event)
             self.relay_manager.run_sync()
+
+            # Wait briefly for OK notices from relays
+            time.sleep(1)
+            self.relay_manager.run_sync()
+
+            confirmed = 0
+            while self.relay_manager.message_pool.has_ok_notices():
+                ok_notice = self.relay_manager.message_pool.get_ok_notice()
+                if ok_notice.ok:
+                    confirmed += 1
+                else:
+                    print(f"Relay {ok_notice.url} rejected event: {ok_notice.message}")
+
+            if confirmed > 0:
+                print(f"Event confirmed by {confirmed} relay(s)")
+            else:
+                print("Warning: No confirmation received from any relay")
 
     def post_batch(self, ride_records: list[HitchhikingRecord], batch_size: int = 100):
         """Post multiple records efficiently in batches"""
@@ -124,7 +145,11 @@ class HitchhikingDataStandardToNostrPoster:
                 
             except Exception as e:
                 print(f"Error publishing batch {i//batch_size + 1}: {e}")
-                continue
+                break
+
+            if i % 100 == 0:
+                print(f"Processed {i} records")
+                time.sleep(60) 
         
         print(f"Successfully published {published_count}/{total_records} records")
 

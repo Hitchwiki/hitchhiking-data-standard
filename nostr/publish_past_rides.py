@@ -58,6 +58,7 @@ lift = pd.concat([no_date, with_date[with_date["datetime"] < "2010-08-11"]])
 wiki = with_date[
     (with_date["datetime"] >= "2010-08-11") & (with_date["datetime"] < "2022-10-13")
 ]
+wiki = wiki.drop_duplicates(subset=[c for c in wiki.columns if c != "id"])
 
 hitchmap = with_date[with_date["datetime"] >= "2022-10-13"]
 
@@ -174,6 +175,7 @@ for _, row in tqdm(hitchmap.iterrows(), total=len(hitchmap)):
         )
     )
 
+
 ### Post your records to the Nostr protocol to publish them
 
 print(f"Total records to publish: {len(hitchhiking_records)}")
@@ -182,6 +184,6 @@ poster = HitchhikingDataStandardToNostrPoster()
 
 # Use batch processing for much faster publishing
 # Adjust batch_size based on your relay capacity (100-500 works well)
-poster.post_batch(hitchhiking_records, batch_size=200)
+poster.post_batch(hitchhiking_records, batch_size=50)
 
 poster.close()
