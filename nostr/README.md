@@ -52,6 +52,6 @@ Use the following Nostr-specific tags that make interacting with the Nostr event
 | `expiration`           | int| No       | If you are still testing and playing around with Nostr events set this to `0`. Otherwise this tag is not needed. |
 
 
-# Example Nostr event
+# How does a hitchhiking ride look like as a Nostr event?
 
 See [nostr.json](nostr.json).
