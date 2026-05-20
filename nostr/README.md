@@ -1,6 +1,6 @@
 
 
-To mitigate data duplication and data being injected into "our" ecosystem from outside actors we collect people (identified by their npub) and the organization/ application (`source`) which they publish hitchhiking rides for here. Thus in case the data gets compromised filtering by the following should yield data from trustworthy sources again.
+To mitigate data duplication and data being injected into the ecosystem of various hitchhiking apps from outside actors we collect people (identified by their npub) and the organization/ application (`source`) which they publish hitchhiking rides for here. Thus in case the data gets compromised filtering by the following should yield data from trustworthy sources again.
 
 | npub         | sources            | Who is responsible?|                                    
 |---------------|------------------------|---|
