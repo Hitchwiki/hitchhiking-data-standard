@@ -31,8 +31,12 @@ if os.path.exists(filename):
     os.remove(filename)
 filename = wget.download(url)
 fn = "dump.sqlite"
-points = pd.read_sql("select * from points where not banned", sqlite3.connect(fn))
+conn = sqlite3.connect(fn)
+points = pd.read_sql("select * from points where not banned", conn)
 points["datetime"] = points["datetime"].astype("datetime64[ns]")
+
+users = pd.read_sql("select id, username from user where make_public = 1", conn)
+user_id_to_username = dict(zip(users["id"], users["username"]))
 
 ### Clean your dataset from issues that your are already aware of
 ### This prevents that others have to do it when fetching these rides
@@ -52,8 +56,6 @@ points["ride_datetime"] = points["ride_datetime"].astype("datetime64[ns]")
 # thus attribute this part of the dataset to the lifershalte
 no_date = points[points["datetime"].isna()]
 with_date = points[~points["datetime"].isna()]
-
-hitchmap = with_date[with_date["datetime"] >= "2022-10-13"]
 
 # Only update the hitchmap rides after accounts were introduced
 hitchmap = with_date[with_date["datetime"] >= "2025-01-01"]
@@ -138,7 +140,11 @@ def create_record_from_row(
         rating=rating_formula(row["rating"]),
         hitchhikers=[
             Hitchhiker(
-                nickname=row["nickname"] if pd.notna(row["nickname"]) else "Anonymous"
+                nickname=row["nickname"]
+                if pd.notna(row["nickname"])
+                else user_id_to_username.get(row["user_id"], "Anonymous")
+                if pd.notna(row.get("user_id"))
+                else "Anonymous"
             )
         ],
         comment=row["comment"],
