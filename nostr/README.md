@@ -19,9 +19,9 @@ To get started with those script you need to set up the python evironment as fol
 cp example.env .env
 # set env vars in .env
 # using python 3.12
-python3 -m venv .venv
+uv venv --python 3.12
 source .venv/bin/activate
-pip install -r requirements.txt
+uv pip install -r requirements.txt
 ```
 
 You and other people have published their hitchhiking rides using the Nostr protocol, thus you can access this common collection of rides.
