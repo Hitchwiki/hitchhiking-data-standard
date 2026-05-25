@@ -1,11 +1,11 @@
 
 
-To mitigate data duplication and data being injected into "our" ecosystem from outside actors we collect people (identified by their npub) and the organization/ application (`source`) which they publish hitchhiking rides for here. Thus in case the data gets compromised filtering by the following should yield data from trustworthy sources again.
+To mitigate data duplication and data being injected into the ecosystem of various hitchhiking apps from outside actors we collect people (identified by their npub) and the organization/ application (`source`) which they publish hitchhiking rides for here. Thus in case the data gets compromised filtering by the following should yield data from trustworthy sources again.
 
 | npub         | sources            | Who is responsible?|                                    
 |---------------|------------------------|---|
-| `d17ff51bfc32d49217e8cb5bfa558a5a78e6cbe3ea4d947acbc7f11ca5c5dbd5` | liftershalte.info, hitchwiki.org, hitchmap.com (until 2026/03/31) | @tillwenke |
-| `d17ff51bfc32d49217e8cb5bfa558a5a78e6cbe3ea4d947acbc7f11ca5c5dbd5` | maps.hitchwiki.org | @tillwenke |
+| `hex: d17ff51bfc32d49217e8cb5bfa558a5a78e6cbe3ea4d947acbc7f11ca5c5dbd5` | liftershalte.info, hitchwiki.org, hitchmap.com (until 2026/03/31) | @tillwenke |
+| `hex: d17ff51bfc32d49217e8cb5bfa558a5a78e6cbe3ea4d947acbc7f11ca5c5dbd5` & `hex: 6623bb9cbae2220e94d5f7581e0fd926db5d67538a08a7f306768e978d4d142e` | maps.hitchwiki.org | @tillwenke |
 
 # Examples
 
@@ -52,6 +52,6 @@ Use the following Nostr-specific tags that make interacting with the Nostr event
 | `expiration`           | int| No       | If you are still testing and playing around with Nostr events set this to `0`. Otherwise this tag is not needed. |
 
 
-# Example Nostr event
+# How does a hitchhiking ride look like as a Nostr event?
 
 See [nostr.json](nostr.json).

@@ -1,0 +1,246 @@
+[
+  {
+    "id": "ae77a1ced12c88f89d176cbf997ac006fe5a192bf52ec88b4430b75e25901930",
+    "pubkey": "d17ff51bfc32d49217e8cb5bfa558a5a78e6cbe3ea4d947acbc7f11ca5c5dbd5",
+    "created_at": 1777627397,
+    "kind": 36820,
+    "tags": [
+      [
+        "d",
+        "maps.hitchwiki.org-70d85719-b35e-4f23-b332-86516969990c"
+      ],
+      [
+        "g",
+        "u"
+      ],
+      [
+        "g",
+        "u2"
+      ],
+      [
+        "g",
+        "u27"
+      ],
+      [
+        "g",
+        "u275"
+      ],
+      [
+        "g",
+        "u2758"
+      ],
+      [
+        "g",
+        "u27588"
+      ],
+      [
+        "g",
+        "u275884"
+      ],
+      [
+        "g",
+        "u275884u"
+      ],
+      [
+        "g",
+        "u275884uu"
+      ],
+      [
+        "g",
+        "u275884uu4"
+      ],
+      [
+        "published_at",
+        "1777627397"
+      ]
+    ],
+    "content": "{\"version\":\"0.0.0\",\"stops\":[{\"location\":{\"latitude\":47.02231260039978,\"longitude\":15.494671089260152,\"is_exact\":true},\"departure_time\":\"2026-04-30T20:00:00\",\"waiting_duration\":\"PT100M\"},{\"location\":{\"latitude\":47.0963880360914,\"longitude\":15.98316772375256,\"is_exact\":false}}],\"rating\":1,\"hitchhikers\":[{\"nickname\":\"Anonymous\"},{\"nickname\":\"Anonymous\"}],\"comment\":\"THIS PLACE SHOULD NOT BE ON HITCHWIKI. We went there - super difficult - clime through a fence directly into the highway. BUT It's illegal to hitchhike on highway in Austria. Tried to hitchhike for 5 minuttes and then went to the start of the highway where the police came. Someone had called the police on us. Luckily we had gotten of the highway. Ended up after almost 2 hours to get a 20 minutes ride by a drunk guy. AUSTRIA is not the place to hitchhike.\",\"signals\":[{\"methods\":[\"sign\"],\"duration\":\"PT100M\"}],\"source\":\"maps.hitchwiki.org\",\"license\":\"xxx\",\"submission_time\":\"2026-05-01T09:23:17\"}",
+    "sig": "8e1e5cb53c63c1bc6acb25f28542a6e29c8355d0a95369f85a694fbb231ba0315428b73d70c117252e8a152d716ccfbb7c0e0fa4b236cab0defcfa30351ab231",
+    "_relays": [
+      "wss://relay.nomadwiki.org"
+    ]
+  },
+  {
+    "id": "858e4bccd7bd56b822e57f0d23ea06f41c29aafe3dc0623b9be4ce45ecbbcd49",
+    "pubkey": "d17ff51bfc32d49217e8cb5bfa558a5a78e6cbe3ea4d947acbc7f11ca5c5dbd5",
+    "created_at": 1777633055,
+    "kind": 36820,
+    "tags": [
+      [
+        "d",
+        "maps.hitchwiki.org-66477170-6a8b-4ead-8817-524d12871f66"
+      ],
+      [
+        "g",
+        "u"
+      ],
+      [
+        "g",
+        "u3"
+      ],
+      [
+        "g",
+        "u3b"
+      ],
+      [
+        "g",
+        "u3bu"
+      ],
+      [
+        "g",
+        "u3buu"
+      ],
+      [
+        "g",
+        "u3buug"
+      ],
+      [
+        "g",
+        "u3buugm"
+      ],
+      [
+        "g",
+        "u3buugm8"
+      ],
+      [
+        "g",
+        "u3buugm88"
+      ],
+      [
+        "g",
+        "u3buugm889"
+      ],
+      [
+        "published_at",
+        "1777633055"
+      ]
+    ],
+    "content": "{\"version\":\"0.0.0\",\"stops\":[{\"location\":{\"latitude\":55.69665668641956,\"longitude\":12.521002292633058,\"is_exact\":true},\"departure_time\":\"2026-05-01T12:15:00\",\"waiting_duration\":\"PT10M\"},{\"location\":{\"latitude\":55.48892033808544,\"longitude\":12.162115574155907,\"is_exact\":false}}],\"rating\":4,\"hitchhikers\":[{\"nickname\":\"Anonymous\"}],\"comment\":\"Good for going west from the city, might not always have place to stop tho\",\"signals\":[{\"methods\":[\"thumb\"],\"duration\":\"PT10M\"}],\"source\":\"maps.hitchwiki.org\",\"license\":\"xxx\",\"submission_time\":\"2026-05-01T10:57:35\"}",
+    "sig": "52518887fd47c690f100a0b5c528f7d0dc0db8f51b3f8673dd110529291a7fddff92509e1e1967aab8d46bb578948af67e06d29dd7110d847412409e0394caa0",
+    "_relays": [
+      "wss://relay.nomadwiki.org"
+    ]
+  },
+  {
+    "id": "6fd06db2828af83db68e2cb115f61d814b88cda56016f2e5d14b7cf67381163a",
+    "pubkey": "d17ff51bfc32d49217e8cb5bfa558a5a78e6cbe3ea4d947acbc7f11ca5c5dbd5",
+    "created_at": 1777673469,
+    "kind": 36820,
+    "tags": [
+      [
+        "d",
+        "maps.hitchwiki.org-f11bfb8e-1a23-4953-ac15-af8dae675f26"
+      ],
+      [
+        "g",
+        "u"
+      ],
+      [
+        "g",
+        "u3"
+      ],
+      [
+        "g",
+        "u3t"
+      ],
+      [
+        "g",
+        "u3tj"
+      ],
+      [
+        "g",
+        "u3tju"
+      ],
+      [
+        "g",
+        "u3tjuu"
+      ],
+      [
+        "g",
+        "u3tjuu0"
+      ],
+      [
+        "g",
+        "u3tjuu0w"
+      ],
+      [
+        "g",
+        "u3tjuu0w8"
+      ],
+      [
+        "g",
+        "u3tjuu0w8u"
+      ],
+      [
+        "published_at",
+        "1777673469"
+      ]
+    ],
+    "content": "{\"version\":\"0.0.0\",\"stops\":[{\"location\":{\"latitude\":54.47135470020459,\"longitude\":18.490709066390995,\"is_exact\":true},\"departure_time\":\"2026-05-01T13:10:00\",\"waiting_duration\":\"PT15M\"},{\"location\":{\"latitude\":54.532120797266415,\"longitude\":17.75593721866608,\"is_exact\":false}}],\"rating\":5,\"hitchhikers\":[{\"nickname\":\"Anonymous\"}],\"comment\":\"było super, mili ludzie \",\"signals\":[{\"methods\":[\"asking\"],\"duration\":\"PT15M\"}],\"source\":\"maps.hitchwiki.org\",\"license\":\"xxx\",\"submission_time\":\"2026-05-01T22:11:09\"}",
+    "sig": "e98c4dd09be8146550c4ac4a3ab4ad053187fa40a5db9a66ea742b55354688742e3227f14a9eeebc314e1877662afa7814701d8d0b7ae50c99cb3ba714e0734f",
+    "_relays": [
+      "wss://relay.nomadwiki.org"
+    ]
+  },
+  {
+    "id": "47970d2faa10d7c0440e4b65a06ab409a0144425cbb92be12eddbd527ea3d286",
+    "pubkey": "d17ff51bfc32d49217e8cb5bfa558a5a78e6cbe3ea4d947acbc7f11ca5c5dbd5",
+    "created_at": 1777754752,
+    "kind": 36820,
+    "tags": [
+      [
+        "d",
+        "maps.hitchwiki.org-495bcca3-167f-4e0d-9c30-c503a81384d0"
+      ],
+      [
+        "g",
+        "u"
+      ],
+      [
+        "g",
+        "u0"
+      ],
+      [
+        "g",
+        "u0y"
+      ],
+      [
+        "g",
+        "u0yh"
+      ],
+      [
+        "g",
+        "u0yhu"
+      ],
+      [
+        "g",
+        "u0yhuu"
+      ],
+      [
+        "g",
+        "u0yhuuy"
+      ],
+      [
+        "g",
+        "u0yhuuy8"
+      ],
+      [
+        "g",
+        "u0yhuuy89"
+      ],
+      [
+        "g",
+        "u0yhuuy89n"
+      ],
+      [
+        "published_at",
+        "1777754752"
+      ]
+    ],
+    "content": "{\"version\":\"0.0.0\",\"stops\":[{\"location\":{\"latitude\":50.079926294370416,\"longitude\":8.65521132946016,\"is_exact\":true},\"departure_time\":\"2025-06-07T10:45:00\",\"waiting_duration\":\"PT30M\"},{\"location\":{\"latitude\":48.56334027188186,\"longitude\":7.956614792346955,\"is_exact\":false}}],\"rating\":4,\"hitchhikers\":[{\"nickname\":\"Anonymous\"}],\"signals\":[{\"methods\":[\"sign\"],\"duration\":\"PT30M\"}],\"source\":\"maps.hitchwiki.org\",\"license\":\"xxx\",\"submission_time\":\"2026-05-02T20:45:52\"}",
+    "sig": "949deddb95b76f2a8ee3e9c01b8ac7e8a80794475315684702e199dea25dbaccfddb901bd3ec05e860d3ae72d36565e8aa564ddc65f7eb526b554cc3cb8cc2f4",
+    "_relays": [
+      "wss://relay.nomadwiki.org"
+    ]
+  }
+]

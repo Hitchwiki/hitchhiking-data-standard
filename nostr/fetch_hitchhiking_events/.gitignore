@@ -1,4 +1,6 @@
 *.csv
+rides.json
 node_modules/
 dist/
 .vscode/
+.env
