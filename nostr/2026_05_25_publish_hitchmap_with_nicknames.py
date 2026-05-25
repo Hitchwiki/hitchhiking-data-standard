@@ -2,6 +2,9 @@
 """
 An example of how to take a present dataset of hitchhiking rides,
 transform it into the defined standard and to post it to Nostr so that others can access it.
+
+Ran via: sudo .venv/bin/python3 2026_05_25_publish_hitchmap_with_nicknames.py to write readonly db.
+Can only do this when on the same server as the relay for very large imports.
 """
 
 import sys
@@ -176,7 +179,6 @@ for _, row in tqdm(hitchmap.iterrows(), total=len(hitchmap)):
         )
     )
 
-
 ### Post your records to the Nostr protocol to publish them
 
 print(f"Total records to publish: {len(hitchhiking_records)}")
@@ -185,6 +187,6 @@ poster = HitchhikingDataStandardToNostrPoster()
 
 # Use batch processing for much faster publishing
 # Adjust batch_size based on your relay capacity (100-500 works well)
-poster.post_batch(hitchhiking_records, batch_size=50)
+poster.post_batch_to_db(ride_records=hitchhiking_records, db_path="/var/www/relay.nomadwiki.org/data/nostr.db", batch_size=50)
 
 poster.close()
