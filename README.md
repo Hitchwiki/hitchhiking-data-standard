@@ -28,4 +28,13 @@ Nostr is a fairly recent standard for Notes and Other Stuff Transmitted by Relay
 The corresponding Nostr event
 In `NOSTR.md`.
 
+## License
+
+This repository is dual-licensed (see [`LICENSE.md`](./LICENSE.md) for details):
+
+- **Specification & documentation** (`STANDARD.md`, `tags/`, docs) — [CC BY-SA 4.0](./LICENSE-CC-BY-SA-4.0.txt)
+- **Code** (`python/`, `nostr/`) — [GNU AGPL v3](./LICENSE-AGPLv3.txt)
+
+Datasets built with this standard are best published under the [ODbL](https://opendatacommons.org/licenses/odbl/).
+
 

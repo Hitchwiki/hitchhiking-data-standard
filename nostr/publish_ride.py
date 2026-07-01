@@ -1,4 +1,19 @@
 # From https://github.com/Hitchwiki/hitchhiking-data-standard/blob/main/nostr/publish_ride.py
+#
+# Copyright (C) 2025-2026 Till Wenke
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 An example of how to take a ride that was just recorded
 e.g. on a hitchhiking application with opinionated fields that were collected by the application,
