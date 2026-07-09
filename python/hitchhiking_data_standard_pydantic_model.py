@@ -152,6 +152,21 @@ class DeclinedRide(BaseModel, use_enum_values=True):
     reasons: Optional[List[DeclinedRideReasonEnum]] = None
 
 
+class NoRideReasonEnum(str, Enum):
+    waited_too_long = "waited_too_long"
+    bad_weather = "bad_weather"
+    darkness = "darkness"
+    unsafe_location = "unsafe_location"
+    poor_spot = "poor_spot"
+    too_much_competition = "too_much_competition"
+    changed_plans = "changed_plans"
+    took_alternative_transport = "took_alternative_transport"
+    gave_up = "gave_up"
+
+class NoRide(BaseModel, use_enum_values=True):
+    reasons: Optional[List[NoRideReasonEnum]] = None
+
+
 class Stop(BaseModel):
     location: Location = Field(...)
     arrival_time: Optional[str] = None  # RFC 9557 format
@@ -170,6 +185,7 @@ class HitchhikingRecord(BaseModel):
     mode_of_transportation: Optional[ModeOfTranportation] = None
     ride: Optional[Ride] = None
     declined_rides: Optional[List[DeclinedRide]] = None
+    no_ride: Optional[NoRide] = None  # Present when the hitchhiker gave up at the spot without getting a ride
     images: Optional[List[str]] = None  # URLs to images taken during the ride
     source: str = Field(...)
     license: str = Field(...)

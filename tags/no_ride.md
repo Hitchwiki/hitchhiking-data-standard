@@ -1,0 +1,5 @@
+- [ ] Approved
+
+| Tag      | Importance   | Type          | Description                                                                 | Enum | Example |
+|----------|--------------|---------------|-----------------------------------------------------------------------------|------|---------|
+| reasons  | recommended  | list[string]  | The reasons why the hitchhiker gave up at the spot without getting a ride. | `waited_too_long` (the hitchhiker was not willing to wait any longer), `bad_weather` (weather made waiting or hitchhiking impractical), `darkness` (it got too dark to continue), `unsafe_location` (the spot felt unsafe to wait at), `poor_spot` (the spot turned out to be badly suited for being picked up, e.g. no space to stop, too little traffic), `too_much_competition` (other hitchhikers were competing for the same rides), `changed_plans` (the hitchhiker decided not to take this ride anymore), `took_alternative_transport` (the hitchhiker continued by other means, e.g. public transport), `gave_up` (generic or unspecified reason) |[waited_too_long, darkness]         |

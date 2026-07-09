@@ -242,5 +242,66 @@
     "_relays": [
       "wss://relay.nomadwiki.org"
     ]
+  },
+  {
+    "id": "e8c966b474cbacae9713523475327a716fbe833de0aa19a2851b416ae0a68dde",
+    "pubkey": "4227f63498710ed5fde1f27527cf3b15893f6143f6b1d851639bc6db2155a979",
+    "created_at": 1777627397,
+    "kind": 36820,
+    "tags": [
+      [
+        "d",
+        "private-8aef3893-e81b-45b1-b682-f1309c9d1492"
+      ],
+      [
+        "g",
+        "u"
+      ],
+      [
+        "g",
+        "u2"
+      ],
+      [
+        "g",
+        "u27"
+      ],
+      [
+        "g",
+        "u275"
+      ],
+      [
+        "g",
+        "u2758"
+      ],
+      [
+        "g",
+        "u27588"
+      ],
+      [
+        "g",
+        "u275884"
+      ],
+      [
+        "g",
+        "u275884u"
+      ],
+      [
+        "g",
+        "u275884uu"
+      ],
+      [
+        "g",
+        "u275884uu4"
+      ],
+      [
+        "published_at",
+        "1777627397"
+      ]
+    ],
+    "content": "{\"version\":\"0.0.0\",\"stops\":[{\"location\":{\"latitude\":47.02231260039978,\"longitude\":15.494671089260152,\"is_exact\":true},\"arrival_time\":\"2026-04-30T17:20:00+02:00[Europe/Vienna]\",\"departure_time\":\"2026-04-30T20:00:00+02:00[Europe/Vienna]\",\"waiting_duration\":\"PT160M\"}],\"rating\":1,\"hitchhikers\":[{\"nickname\":\"Anonymous\"}],\"comment\":\"Almost no traffic and nowhere safe to pull over. Gave up once it got dark.\",\"signals\":[{\"methods\":[\"thumb\",\"sign\"],\"duration\":\"PT160M\"}],\"no_ride\":{\"reasons\":[\"waited_too_long\",\"darkness\"]},\"source\":\"private\",\"license\":\"cc-by-4.0\",\"submission_time\":\"2026-04-30T20:05:00+02:00[Europe/Vienna]\"}",
+    "sig": "3335d2e847ab88244e8e04163b380fd302ee115619cc6750b4b99949079aeb95b6f7fd5aeacf2ceaa43601fac3aeaeff86bfcc08627c2f9da7200d8b4a8edb0a",
+    "_relays": [
+      "wss://relay.nomadwiki.org"
+    ]
   }
 ]
