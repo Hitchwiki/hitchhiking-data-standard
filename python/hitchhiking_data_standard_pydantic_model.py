@@ -84,8 +84,31 @@ class ReasonToPickUpEnum(str, Enum):
     safety_concern = "safety_concern"
     opposed = "opposed"
 
+class PositiveExperienceEnum(str, Enum):
+    friendly = "friendly"
+    good_conversation = "good_conversation"
+    helpful = "helpful"
+    safe_driving = "safe_driving"
+    generous = "generous"
+    interesting = "interesting"
+    felt_safe = "felt_safe"
+    comfortable = "comfortable"
+
+class NegativeExperienceEnum(str, Enum):
+    unfriendly = "unfriendly"
+    unsafe_driving = "unsafe_driving"
+    uncomfortable = "uncomfortable"
+    inappropriate_behavior = "inappropriate_behavior"
+    intoxicated = "intoxicated"
+    aggressive = "aggressive"
+    expected_something_in_return = "expected_something_in_return"
+    felt_unsafe = "felt_unsafe"
+
 class Occupant(Person, use_enum_values=True):
     reasons_to_pick_up: Optional[ReasonToPickUpEnum] = None
+    would_ride_again: Optional[bool] = None  # Whether the hitchhiker would take a ride with this occupant again
+    positive_experiences: Optional[List[PositiveExperienceEnum]] = None
+    negative_experiences: Optional[List[NegativeExperienceEnum]] = None
 
 
 class KindEnum(str, Enum):
