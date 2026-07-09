@@ -105,7 +105,7 @@ class NegativeExperienceEnum(str, Enum):
     felt_unsafe = "felt_unsafe"
 
 class Occupant(Person, use_enum_values=True):
-    reasons_to_pick_up: Optional[ReasonToPickUpEnum] = None
+    reasons_to_pick_up: Optional[List[ReasonToPickUpEnum]] = None
     would_ride_again: Optional[bool] = None  # Whether the hitchhiker would take a ride with this occupant again
     positive_experiences: Optional[List[PositiveExperienceEnum]] = None
     negative_experiences: Optional[List[NegativeExperienceEnum]] = None
