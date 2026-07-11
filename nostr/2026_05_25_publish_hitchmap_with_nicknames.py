@@ -202,6 +202,6 @@ poster = HitchhikingDataStandardToNostrPoster()
 
 # Use batch processing for much faster publishing
 # Adjust batch_size based on your relay capacity (100-500 works well)
-poster.post_batch_to_db(ride_records=hitchhiking_records, db_path="/var/www/relay.nomadwiki.org/data/nostr.db", batch_size=50)
+poster.post_batch_to_db(ride_records=hitchhiking_records, db_path="/var/www/relay.maps.hitchwiki.org/data/nostr.db", batch_size=50)
 
 poster.close()
