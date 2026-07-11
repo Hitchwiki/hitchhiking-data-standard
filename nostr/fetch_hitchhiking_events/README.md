@@ -35,7 +35,7 @@ already-set variable, so you can also pass variables inline on the command line.
 
 | Variable          | Required | Description |
 |-------------------|----------|-------------|
-| `RELAYS`          | yes      | JSON array of relay websocket URLs, e.g. `["wss://relay.nomadwiki.org"]` |
+| `RELAYS`          | yes      | JSON array of relay websocket URLs, e.g. `["wss://relay.maps.hitchwiki.org"]` |
 | `NOSTR_EVENT_KIND`| yes      | Nostr event kind for rides (`36820`) |
 | `SINCE`           | no       | Only fetch rides created at/after this time. ISO date (`2026-01-01`), ISO datetime (`2026-01-01T00:00:00Z`), or a Unix timestamp in seconds. Defaults to the full history. |
 | `PUBKEYS`         | no       | JSON array of author public keys (hex). Only rides signed by these keys are fetched. Defaults to all authors. |
@@ -60,7 +60,7 @@ a specific app** (e.g. `maps.hitchwiki.org`), set `SINCE` and `SOURCE`.
 Either put them in `.env`:
 
 ```env
-RELAYS=["wss://relay.nomadwiki.org"]
+RELAYS=["wss://relay.maps.hitchwiki.org"]
 NOSTR_EVENT_KIND=36820
 SINCE=2026-01-01
 SOURCE=maps.hitchwiki.org
@@ -73,7 +73,7 @@ node dist/index.js
 …or pass them inline for a one-off run (inline variables override the `.env`):
 
 ```bash
-RELAYS='["wss://relay.nomadwiki.org"]' NOSTR_EVENT_KIND=36820 \
+RELAYS='["wss://relay.maps.hitchwiki.org"]' NOSTR_EVENT_KIND=36820 \
   SINCE=2026-01-01 SOURCE=maps.hitchwiki.org \
   node dist/index.js
 ```
@@ -98,7 +98,7 @@ narrows what remains:
 Expected log output looks roughly like:
 
 ```
-Using relays: [ 'wss://relay.nomadwiki.org' ]
+Using relays: [ 'wss://relay.maps.hitchwiki.org' ]
 Fetching Nostr event kind (this can take a while): 36820
 Fetching rides created since: 2026-01-01T00:00:00.000Z
 Keeping only rides from source: maps.hitchwiki.org
