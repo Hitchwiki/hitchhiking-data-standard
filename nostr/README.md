@@ -4,7 +4,7 @@ To mitigate data duplication and data being injected into the ecosystem of vario
 
 | npub         | sources            | Who is responsible?|                                    
 |---------------|------------------------|---|
-| `hex: 6623bb9cbae2220e94d5f7581e0fd926db5d67538a08a7f306768e978d4d142e` | liftershalte.info, hitchwiki.org, hitchmap.com (until 2026/05/25) | @tillwenke |
+| `hex: 6623bb9cbae2220e94d5f7581e0fd926db5d67538a08a7f306768e978d4d142e` | liftershalte.info, hitchwiki.org, hitchmap.com (pulling new rides regularly) | @tillwenke |
 | `hex: 6623bb9cbae2220e94d5f7581e0fd926db5d67538a08a7f306768e978d4d142e` | maps.hitchwiki.org | @tillwenke |
 | indiviual user's key | triphopping.com | @kenflannery |
 
