@@ -25,6 +25,13 @@ all accounts are published, not just the ones that set `make_public`.
 
 Only rides submitted *after* the most recent hitchmap.com ride already in the relay
 are published, so the script can be re-run to catch up without creating duplicates.
+Rides that hitchmap.com stores more than once, and rides the relay already holds, are
+dropped as well - see "Drop duplicates" below.
+
+The dump is verified before it is used and the relay database before and after it is
+written to; see "Load the current hitchmap dump" and "Check the relay database over".
+Exit codes: 0 published, 1 nothing to publish, 2 no usable dump, 3 relay database not
+writable or batch did not land intact.
 
 Ran via: sudo .venv/bin/python3 2026_07_29_publish_hitchmap_with_nicknames.py to write readonly db.
 Can only do this when on the same server as the relay for very large imports.
@@ -105,13 +112,129 @@ else:
 
 
 ### Load the current hitchmap dump
+###
+### The download is not always complete: on 2026-08-12 wget produced a 19 MB file holding nothing
+### but the `points` table, and the run died on `select ... from user` after having already decided
+### its cutoff. A truncated dump is therefore verified before it replaces the previous one, and a
+### failed download is retried rather than taken at face value.
 
 import wget  # noqa: E402  (imported late so that --help stays fast)
 
-if os.path.exists(DUMP_FILE):
-    os.remove(DUMP_FILE)
-filename = wget.download(DUMP_URL, DUMP_FILE)
-print()
+DUMP_MIN_BYTES = 40 * 1024 * 1024  # the real dump is ~60 MB and only grows
+DUMP_MIN_POINTS = 60_000  # 79k as of 2026-08-12; a floor, not an expectation
+DUMP_REQUIRED_TABLES = ("points", "user")
+DUMP_REQUIRED_COLUMNS = (
+    "id", "lat", "lon", "rating", "wait", "nickname", "comment", "datetime",
+    "banned", "dest_lat", "dest_lon", "signal", "ride_datetime", "user_id",
+)
+DOWNLOAD_ATTEMPTS = 3
+
+EXIT_NOTHING_TO_PUBLISH = 1  # kept distinct: this is the normal no-op outcome
+EXIT_BROKEN_DUMP = 2
+EXIT_BROKEN_WRITE = 3
+
+
+def dump_defects(path: str) -> list[str]:
+    """Everything wrong with the file at `path`, empty when it is a usable hitchmap dump."""
+    if not os.path.exists(path):
+        return ["file was not created"]
+
+    size = os.path.getsize(path)
+    if size < DUMP_MIN_BYTES:
+        return [f"only {size / 1024 / 1024:.1f} MB, expected at least {DUMP_MIN_BYTES // 1024 // 1024} MB"]
+
+    defects = []
+    try:
+        conn = sqlite3.connect(f"file:{path}?mode=ro", uri=True)
+    except sqlite3.Error as error:
+        return [f"cannot be opened as SQLite: {error}"]
+    try:
+        # quick_check skips the (much slower) index cross-checks that integrity_check does.
+        (verdict,) = conn.execute("PRAGMA quick_check").fetchone()
+        if verdict != "ok":
+            return [f"failed SQLite quick_check: {verdict}"]
+
+        tables = {name for (name,) in conn.execute("SELECT name FROM sqlite_master WHERE type='table'")}
+        missing = [t for t in DUMP_REQUIRED_TABLES if t not in tables]
+        if missing:
+            defects.append(f"missing table(s): {', '.join(missing)}")
+        if "points" not in missing:
+            columns = {row[1] for row in conn.execute("PRAGMA table_info(points)")}
+            absent = [c for c in DUMP_REQUIRED_COLUMNS if c not in columns]
+            if absent:
+                defects.append(f"points is missing column(s): {', '.join(absent)}")
+            (count,) = conn.execute("SELECT count(*) FROM points").fetchone()
+            if count < DUMP_MIN_POINTS:
+                defects.append(f"only {count} points, expected at least {DUMP_MIN_POINTS}")
+            (dated,) = conn.execute("SELECT count(*) FROM points WHERE datetime IS NOT NULL").fetchone()
+            if not dated:
+                defects.append("no point carries a submission time")
+    except sqlite3.DatabaseError as error:
+        defects.append(f"is not readable: {error}")
+    finally:
+        conn.close()
+    return defects
+
+
+def dump_point_count(path: str) -> int | None:
+    """Points in an existing dump, for the shrink check. None when it cannot be read."""
+    if not os.path.exists(path):
+        return None
+    try:
+        conn = sqlite3.connect(f"file:{path}?mode=ro", uri=True)
+        try:
+            (count,) = conn.execute("SELECT count(*) FROM points").fetchone()
+            return count
+        finally:
+            conn.close()
+    except sqlite3.Error:
+        return None
+
+
+def download_dump() -> None:
+    """Fetch the dump into DUMP_FILE, leaving the previous one in place unless the new one is sound."""
+    previous_count = dump_point_count(DUMP_FILE)
+    partial = f"{DUMP_FILE}.part"
+
+    for attempt in range(1, DOWNLOAD_ATTEMPTS + 1):
+        if os.path.exists(partial):
+            os.remove(partial)
+        try:
+            wget.download(DUMP_URL, partial)
+            print()
+        except Exception as error:  # noqa: BLE001 - any transport failure is just a retry
+            print(f"Download attempt {attempt}/{DOWNLOAD_ATTEMPTS} failed: {error}")
+            continue
+
+        defects = dump_defects(partial)
+        if defects:
+            print(f"Download attempt {attempt}/{DOWNLOAD_ATTEMPTS} produced an unusable dump:")
+            for defect in defects:
+                print(f"  - the downloaded file {defect}")
+            continue
+
+        new_count = dump_point_count(partial)
+        if previous_count and new_count and new_count < previous_count * 0.95:
+            # Not fatal: bans and deletions do shrink the dump. Worth seeing in the log though.
+            print(
+                f"Warning: the dump shrank from {previous_count} to {new_count} points "
+                "since the last run"
+            )
+        os.replace(partial, DUMP_FILE)
+        print(f"Dump verified: {new_count} points, {os.path.getsize(DUMP_FILE) / 1024 / 1024:.1f} MB")
+        return
+
+    if os.path.exists(partial):
+        os.remove(partial)
+    print(
+        f"Could not obtain a usable {DUMP_URL} after {DOWNLOAD_ATTEMPTS} attempts - "
+        "nothing was published, the previous dump is left untouched.",
+        file=sys.stderr,
+    )
+    sys.exit(EXIT_BROKEN_DUMP)
+
+
+download_dump()
 
 conn = sqlite3.connect(DUMP_FILE)
 points = pd.read_sql("select * from points where not banned", conn)
@@ -173,6 +296,121 @@ hitchmap["nickname"] = hitchmap.apply(resolve_nickname, axis=1)
 print(
     f"Nicknames: {(hitchmap['nickname'] != 'Anonymous').sum()} named, "
     f"{(hitchmap['nickname'] == 'Anonymous').sum()} anonymous"
+)
+
+
+### Drop duplicates
+###
+### hitchmap.com itself stores some submissions several times over: a double-clicked or retried
+### submit writes two or more `points` rows that are identical apart from their `id` and a
+### sub-second difference in `datetime`. Publishing those unchanged gave the relay 119 redundant
+### ride notes (removed on 2026-08-12). A ride is therefore treated as a duplicate of another when
+### its whole payload - position, comment, ride time, rating, nickname - matches and the two were
+### submitted within DUP_WINDOW_S of each other. The earliest submission wins.
+###
+### The same check runs against the rides the relay already holds, so publishing a range that
+### overlaps what is stored (an explicit --since, or a cutoff that moved backwards) cannot
+### re-import anything either.
+
+DUP_WINDOW_S = 300
+
+
+def normalise_time(value) -> str:
+    """A timestamp in the exact form the published record carries it ('' when absent)."""
+    if value is None or (not isinstance(value, str) and pd.isna(value)):
+        return ""
+    if isinstance(value, str):
+        return value[:19]
+    return value.strftime("%Y-%m-%dT%H:%M:%S")
+
+
+def ride_key(lat, lon, comment, ride_time, rating, nickname) -> tuple:
+    """Identity of a ride, ignoring the fields that differ between duplicate submissions.
+
+    Coordinates are rounded to 7 decimals (~1 cm) so that a float round-trip through the
+    published JSON cannot make the same position look like two.
+    """
+    return (
+        None if lat is None or pd.isna(lat) else round(float(lat), 7),
+        None if lon is None or pd.isna(lon) else round(float(lon), 7),
+        "" if comment is None or (not isinstance(comment, str) and pd.isna(comment)) else str(comment).strip(),
+        normalise_time(ride_time),
+        None if rating is None or pd.isna(rating) else int(rating),
+        "" if nickname is None else str(nickname).strip(),
+    )
+
+
+def submission_epoch(value) -> int | None:
+    """Whole seconds since the epoch, matching the precision rides are published with."""
+    if value is None or (not isinstance(value, str) and pd.isna(value)):
+        return None
+    ts = pd.to_datetime(value, errors="coerce")
+    return None if pd.isna(ts) else int(ts.floor("s").timestamp())
+
+
+def relay_ride_keys(relay_db: str) -> dict:
+    """key -> submission epochs, for every hitchmap.com ride the relay already holds."""
+    conn = sqlite3.connect(f"file:{relay_db}?mode=ro", uri=True)
+    try:
+        rows = conn.execute(
+            """SELECT json_extract(j, '$.stops[0].location.latitude'),
+                      json_extract(j, '$.stops[0].location.longitude'),
+                      json_extract(j, '$.comment'),
+                      json_extract(j, '$.stops[0].departure_time'),
+                      json_extract(j, '$.rating'),
+                      json_extract(j, '$.hitchhikers[0].nickname'),
+                      json_extract(j, '$.submission_time')
+               FROM (SELECT json_extract(content, '$.content') AS j
+                     FROM event WHERE kind = 36820)
+               WHERE json_extract(j, '$.source') = ?""",
+            (SOURCE,),
+        ).fetchall()
+    finally:
+        conn.close()
+
+    seen = {}
+    for lat, lon, comment, ride_time, rating, nickname, submission_time in rows:
+        seen.setdefault(ride_key(lat, lon, comment, ride_time, rating, nickname), []).append(
+            submission_epoch(submission_time)
+        )
+    return seen
+
+
+def is_duplicate(seen: dict, key: tuple, epoch: int | None) -> bool:
+    """True when `seen` already holds this ride, submitted at about the same time."""
+    for other in seen.get(key, ()):
+        if other is None and epoch is None:
+            return True
+        if other is not None and epoch is not None and abs(other - epoch) <= DUP_WINDOW_S:
+            return True
+    return False
+
+
+relay_rides = relay_ride_keys(args.relay_db)
+print(f"{sum(len(v) for v in relay_rides.values())} {SOURCE} rides already in the relay")
+
+# Oldest first, so that the earliest submission of a duplicated ride is the one that is kept.
+batch_rides: dict = {}
+kept_index, dropped_here, dropped_already_in_relay = [], 0, 0
+for index, row in hitchmap.sort_values("datetime").iterrows():
+    key = ride_key(
+        row["lat"], row["lon"], row["comment"], row["ride_datetime"], row["rating"], row["nickname"]
+    )
+    epoch = submission_epoch(row["datetime"])
+    if is_duplicate(relay_rides, key, epoch):
+        dropped_already_in_relay += 1
+        continue
+    if is_duplicate(batch_rides, key, epoch):
+        dropped_here += 1
+        continue
+    batch_rides.setdefault(key, []).append(epoch)
+    kept_index.append(index)
+
+hitchmap = hitchmap.loc[kept_index]
+
+print(
+    f"Dropped {dropped_here} rides duplicated inside the dump and "
+    f"{dropped_already_in_relay} already published; {len(hitchmap)} left to publish"
 )
 
 
@@ -272,12 +510,65 @@ for _, row in tqdm(hitchmap.iterrows(), total=len(hitchmap)):
 print(f"Total records to publish: {len(hitchhiking_records)}")
 
 if not hitchhiking_records:
-    sys.exit("Nothing to publish - the relay is up to date.")
+    print("Nothing to publish - the relay is up to date.")
+    sys.exit(EXIT_NOTHING_TO_PUBLISH)
 
 if args.dry_run:
     print("Dry run - not writing to the relay database. First record:")
     print(hitchhiking_records[0].model_dump_json(exclude_none=True, by_alias=True, indent=2))
     sys.exit(0)
+
+
+### Check the relay database over before and after writing to it
+###
+### The poster writes rows into `event` and `tag` itself instead of going through the relay
+### process, and the sqlite3 CLI leaves foreign keys off, so nothing downstream would notice a
+### half-written batch. Each event contributes exactly 12 tags (one `d`, ten `g`, one
+### `published_at`); anything else means tags went missing or were written twice.
+
+TAGS_PER_EVENT = 12
+
+
+def relay_counts(relay_db: str) -> tuple[int, int, int]:
+    """(events, tags, tags whose event is gone) in the relay database."""
+    conn = sqlite3.connect(f"file:{relay_db}?mode=ro", uri=True)
+    try:
+        (events,) = conn.execute("SELECT count(*) FROM event").fetchone()
+        (tags,) = conn.execute("SELECT count(*) FROM tag").fetchone()
+        (orphans,) = conn.execute(
+            "SELECT count(*) FROM tag t LEFT JOIN event e ON e.id = t.event_id WHERE e.id IS NULL"
+        ).fetchone()
+        return events, tags, orphans
+    finally:
+        conn.close()
+
+
+def assert_relay_writable(relay_db: str) -> None:
+    """Fail before building events if we cannot write - `data/` is owned by the container uid."""
+    try:
+        # Neither mode=rw nor BEGIN IMMEDIATE is enough: SQLite quietly opens an unwritable file
+        # read-only and only complains once something actually writes. So write, then roll back -
+        # the probe table never survives, and the relay's own rows are never touched.
+        conn = sqlite3.connect(f"file:{relay_db}?mode=rw", uri=True, isolation_level=None)
+        try:
+            conn.execute("BEGIN IMMEDIATE")
+            try:
+                conn.execute("CREATE TABLE _import_write_probe (x)")
+            finally:
+                conn.execute("ROLLBACK")
+        finally:
+            conn.close()
+    except sqlite3.Error as error:
+        print(
+            f"Cannot write to {relay_db}: {error}\n"
+            "Run the import as root - data/ is owned by the container uid (100:100).",
+            file=sys.stderr,
+        )
+        sys.exit(EXIT_BROKEN_WRITE)
+
+
+assert_relay_writable(args.relay_db)
+events_before, tags_before, orphans_before = relay_counts(args.relay_db)
 
 poster = HitchhikingDataStandardToNostrPoster()
 
@@ -290,3 +581,34 @@ poster.post_batch_to_db(
 )
 
 poster.close()
+
+events_after, tags_after, orphans_after = relay_counts(args.relay_db)
+events_written = events_after - events_before
+tags_written = tags_after - tags_before
+
+print(
+    f"Relay grew by {events_written} events and {tags_written} tags "
+    f"(expected {len(hitchhiking_records)} and {len(hitchhiking_records) * TAGS_PER_EVENT})"
+)
+
+problems = []
+if events_written != len(hitchhiking_records):
+    problems.append(
+        f"wrote {events_written} of {len(hitchhiking_records)} events - "
+        "the log above names the records that failed"
+    )
+if tags_written != events_written * TAGS_PER_EVENT:
+    problems.append(
+        f"wrote {tags_written} tags for {events_written} events, expected "
+        f"{events_written * TAGS_PER_EVENT}"
+    )
+if orphans_after > orphans_before:
+    problems.append(f"left {orphans_after - orphans_before} tags without an event")
+
+if problems:
+    print("Relay database check failed after publishing:", file=sys.stderr)
+    for problem in problems:
+        print(f"  - {problem}", file=sys.stderr)
+    sys.exit(EXIT_BROKEN_WRITE)
+
+print("Relay database check passed.")
