@@ -48,6 +48,7 @@ class ReasonEnum(str, Enum):
     commute = "commute"
     business = "business"
     recreational = "recreational"
+    errands = "errands"
 
 class Ride(BaseModel, use_enum_values=True):
     vehicle_destination: Optional[Location] = None
@@ -145,6 +146,7 @@ class ReasonToHitchhikeEnum(str, Enum):
     recreational = "recreational"
     environmental = "environmental"
     fundraising = "fundraising"
+    errands = "errands"  # e.g. buying groceries
 
 class Hitchhiker(Person, use_enum_values=True):
     nickname: Optional[str] = None  # Nickname of the hitchhiker. Assumed unique within the data source.
