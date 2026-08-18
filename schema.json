@@ -1,0 +1,246 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$comment": "Full draft for Hitchwiki/hitchhiking-data-standard issue #44 (B72). Top-level record (this file's root type/properties) validates against STANDARD.md, fetched live 2026-08-18 (not from memory of an earlier run). All 11 sub-types in $defs were encoded in an earlier pass this run, re-checked here against a live re-fetch of each tags/*.md file where the top-level table's field names disagreed (see 'waiting_time' note on 'stops' below). Validated with the jsonschema library (4.26.0, installed into .state/jsonschema-venv since this machine has no jsonschema by default) against every worked example embedded in STANDARD.md and each tags/*.md file -- see the .md writeup for the run log, not just eyeballed this time.",
+  "type": "object",
+  "properties": {
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Version of this standard being used, format x.y.z."
+    },
+    "stops": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/stop"},
+      "minItems": 1,
+      "description": "At least one item required. First item marks the origin. If there is more than one item, the last item marks the destination and must not carry departure_time or a waiting duration.",
+      "$comment": "STANDARD.md's own prose says the destination item forbids 'departure_time or waiting_time' -- note the field is actually named waiting_duration everywhere else in the spec (tags/stop.md), a second documentation inconsistency alongside the hitchhiker.nickname/float bug found in the earlier pass; read as referring to waiting_duration. This 'last item, only if length>1' constraint is not enforced here: JSON Schema 2020-12 has no native way to constrain specifically the last element of a variable-length array (prefixItems only pins a fixed prefix), same gap already flagged inside $defs.stop itself. A conforming validator would need a custom keyword or a post-validation script step."
+    },
+    "rating": {
+      "type": "integer",
+      "enum": [1, 2, 3, 4, 5],
+      "description": "Subjective rating of the spot where the ride started (or where the hitchhiker waited, for a no_ride)."
+    },
+    "hitchhikers": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/hitchhiker"},
+      "minItems": 1,
+      "description": "minItems 1 is an inference (STANDARD.md's prose says 'most often a solo hitchhiker' but never states a minimum explicitly) -- flagged, not silently assumed."
+    },
+    "comment": {
+      "type": "string",
+      "description": "Free-form comment about the starting location, destination, or the entire ride."
+    },
+    "signals": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/signal"},
+      "description": "Listed in the order used. STANDARD.md says the sum of each signal's duration must be <= the origin stop's waiting_duration -- a cross-object numeric constraint spanning two different array fields, not encoded here (same class of gap as the stops/no_ride note above)."
+    },
+    "occupants": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/occupant"}
+    },
+    "mode_of_transportation": {"$ref": "#/$defs/mode_of_transportation"},
+    "ride": {"$ref": "#/$defs/ride"},
+    "declined_rides": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/declined_ride"}
+    },
+    "no_ride": {
+      "$ref": "#/$defs/no_ride",
+      "description": "Presence marks the record as a completed no-ride attempt. When set: occupants, ride, and mode_of_transportation must be omitted (enforced below via the root-level if/then); stops 'should' contain exactly one item (STANDARD.md's own word is 'should', not 'must', so not enforced as a hard requirement here)."
+    },
+    "images": {
+      "type": "array",
+      "items": {"type": "string", "format": "uri"}
+    },
+    "source": {
+      "type": "string",
+      "description": "URL of the submitting application, or the literal string \"private\"."
+    },
+    "license": {
+      "type": "string",
+      "description": "Lower-case license identifier. STANDARD.md gives apache-2.0, mit, cc-by-4.0, odbl as examples with a trailing '...', i.e. explicitly non-exhaustive -- not restricted to an enum here on purpose."
+    },
+    "submission_time": {
+      "type": "string",
+      "description": "RFC 9557 date-time when this record was submitted to source."
+    }
+  },
+  "required": ["version", "stops", "hitchhikers", "source", "license", "submission_time"],
+  "additionalProperties": false,
+  "if": {"required": ["no_ride"]},
+  "then": {
+    "not": {
+      "anyOf": [
+        {"required": ["occupants"]},
+        {"required": ["ride"]},
+        {"required": ["mode_of_transportation"]}
+      ]
+    }
+  },
+  "$defs": {
+    "location": {
+      "type": "object",
+      "properties": {
+        "latitude": {"type": "number", "description": "Latitude of a spot in decimal degrees."},
+        "longitude": {"type": "number", "description": "Longitude of a spot in decimal degrees."},
+        "is_exact": {"type": "boolean", "description": "Whether the location is placed exact or just roughly into a city, direction or region."}
+      },
+      "required": ["latitude", "longitude", "is_exact"],
+      "additionalProperties": false
+    },
+    "person": {
+      "type": "object",
+      "properties": {
+        "origin_location": {"type": "string", "description": "The city where the person lives in or any other administrative unit smaller than country-level."},
+        "origin_country": {"type": "string", "pattern": "^[A-Z]{2}$", "description": "Country where the person lives primarily. ISO 3166-1 alpha-2."},
+        "year_of_birth": {"type": "integer"},
+        "gender": {"type": "string", "enum": ["male", "female", "non_binary", "prefer_not_to_say"]},
+        "languages": {"type": "array", "items": {"type": "string", "pattern": "^[a-z]{3}$"}, "description": "ISO 639-3 codes."},
+        "was_driver": {"type": "boolean"}
+      }
+    },
+    "hitchhiker": {
+      "$comment": "Inherits from person (tags/hitchhiker.md: 'inherits from person'), so allOf + its own additional fields rather than duplicating person's fields. Uses unevaluatedProperties, not additionalProperties, at this level -- additionalProperties:false on a sibling allOf branch only sees that branch's own properties, so it would wrongly reject the *other* branch's legitimate fields when the two are combined; unevaluatedProperties is JSON Schema 2020-12's fix for exactly this, and person itself was changed to carry no additionalProperties of its own so this is the only gate. Caught by actually validating STANDARD.md's own worked hitchhiker/occupant examples (jsonschema 4.26.0), not by eyeballing -- the first-pass version of this schema had the bug.",
+      "allOf": [
+        {"$ref": "#/$defs/person"}
+      ],
+      "type": "object",
+      "properties": {
+        "nickname": {"type": "string", "description": "Nickname of the hitchhiker, assumed unique within the scope of the `source` application. STANDARD.md's own source table types this 'float', which contradicts its own example (\"Alice\") -- treated as a documentation typo, encoded as string here, not copied blindly."},
+        "hitchhiking_since": {"type": "integer", "description": "The year the person hitchhiked for the first time."},
+        "reasons_to_hitchhike": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["commute", "vacation", "sport", "financial", "social_exchange", "cultural_exchange", "recreational", "environmental", "fundraising", "errands"]
+          }
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "gift": {
+      "type": "object",
+      "properties": {
+        "kind": {"type": "string", "enum": ["money", "food", "goods"], "description": "Kind of gift received."},
+        "description": {"type": "string", "description": "Further description of the gift received."},
+        "price": {
+          "type": "array",
+          "description": "[amount, currency]. If used, both values are required. currency uses ISO 4217 or common crypto codes (BTC, SATS). amount is a positive decimal number.",
+          "prefixItems": [
+            {"type": "string", "pattern": "^[0-9]+(\\.[0-9]+)?$"},
+            {"type": "string"}
+          ],
+          "minItems": 2,
+          "maxItems": 2
+        }
+      },
+      "required": ["kind"],
+      "additionalProperties": false
+    },
+    "signal": {
+      "type": "object",
+      "properties": {
+        "methods": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["thumb", "waving", "sign", "asking", "invited", "prearranged"]
+          }
+        },
+        "sign_content": {"type": "string", "description": "Only if 'sign' is included in methods."},
+        "sign_languages": {"type": "array", "items": {"type": "string", "pattern": "^[a-z]{3}$"}},
+        "asking_content": {"type": "string", "description": "Only if 'asking' is included in methods."},
+        "asking_languages": {"type": "array", "items": {"type": "string", "pattern": "^[a-z]{3}$"}},
+        "total_solicited": {"type": "integer", "minimum": 0},
+        "duration": {"type": "string", "pattern": "^P", "description": "ISO 8601 duration, e.g. PT30M."}
+      },
+      "required": ["methods"],
+      "additionalProperties": false
+    },
+    "occupant": {
+      "$comment": "Inherits from person (tags/occupant.md: 'inherits from person'), same allOf + unevaluatedProperties pattern as hitchhiker (see its $comment for why additionalProperties would be wrong here).",
+      "allOf": [
+        {"$ref": "#/$defs/person"}
+      ],
+      "type": "object",
+      "properties": {
+        "reasons_to_pick_up": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["is_hitchhiker", "was_hitchhiker", "social_exchange", "cultural_exchange", "environmental", "wanted_driver", "curiosity", "hospitality_norm", "elevated_mood", "nonthreatening_appearance", "sympathy", "safety_concern", "opposed"]
+          }
+        },
+        "would_ride_again": {"type": "boolean"},
+        "positive_experiences": {
+          "type": "array",
+          "items": {"type": "string", "enum": ["friendly", "good_conversation", "helpful", "safe_driving", "generous", "interesting", "felt_safe", "comfortable"]}
+        },
+        "negative_experiences": {
+          "type": "array",
+          "items": {"type": "string", "enum": ["unfriendly", "unsafe_driving", "uncomfortable", "inappropriate_behavior", "intoxicated", "aggressive", "expected_something_in_return", "felt_unsafe"]}
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "mode_of_transportation": {
+      "type": "object",
+      "properties": {
+        "kind": {"type": "string", "enum": ["car", "bus", "van", "truck", "motorbike", "scooter", "taxi", "horse-cart", "train", "camper", "tractor", "plane", "ferry", "boat"]},
+        "make": {"type": "string", "description": "The brand or manufacturer."},
+        "model": {"type": "string"},
+        "license_plate_country": {"type": "string", "pattern": "^[A-Z]{2}$"},
+        "license_plate_identifier": {"type": "string", "description": "Location-based identifier on the plate, e.g. German city/district or French department."}
+      },
+      "required": ["kind"],
+      "additionalProperties": false
+    },
+    "declined_ride": {
+      "type": "object",
+      "properties": {
+        "destination": {"$ref": "#/$defs/location"},
+        "reasons": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["wrong_direction", "too_short", "too_long", "risk_concern", "safety_concern", "space_missing", "too_slow"]
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "no_ride": {
+      "type": "object",
+      "properties": {
+        "reasons": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["waited_too_long", "bad_weather", "darkness", "unsafe_location", "poor_spot", "too_much_competition", "changed_plans", "took_alternative_transport", "gave_up"]
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "ride": {
+      "type": "object",
+      "properties": {
+        "vehicle_destination": {"$ref": "#/$defs/location", "description": "Final destination of the vehicle ride, can be further than the hitchhiker's own ride."},
+        "reasons": {"type": "array", "items": {"type": "string", "enum": ["holiday", "commute", "business", "recreational", "errands"]}}
+      },
+      "additionalProperties": false
+    },
+    "stop": {
+      "$comment": "STANDARD.md's own 'stops' field says arrival_time/departure_time are not allowed on the last (destination) item -- that cross-item constraint lives at the record level (see the root 'stops' property's own $comment), not encodable inside a single stop's own schema, so not attempted here.",
+      "type": "object",
+      "properties": {
+        "location": {"$ref": "#/$defs/location"},
+        "arrival_time": {"type": "string", "description": "RFC 9557 date-time."},
+        "departure_time": {"type": "string", "description": "RFC 9557 date-time."},
+        "waiting_duration": {"type": "string", "pattern": "^P", "description": "ISO 8601 duration, e.g. PT50M."}
+      },
+      "additionalProperties": false
+    }
+  }
+}
