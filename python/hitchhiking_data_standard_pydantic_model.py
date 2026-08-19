@@ -53,6 +53,7 @@ class ReasonEnum(str, Enum):
 class Ride(BaseModel, use_enum_values=True):
     vehicle_destination: Optional[Location] = None
     reasons: Optional[List[ReasonEnum]] = None
+    expected_payment: Optional[Tuple[float, str]] = None  # [amount, currency], payment demanded (if any)
 
 
 class GenderEnum(str, Enum):
@@ -171,10 +172,12 @@ class DeclinedRideReasonEnum(str, Enum):
     safety_concern = "safety_concern"
     space_missing = "space_missing"
     too_slow = "too_slow"
+    payment_demanded = "payment_demanded"
 
 class DeclinedRide(BaseModel, use_enum_values=True):
     destination: Optional[Location] = None
     reasons: Optional[List[DeclinedRideReasonEnum]] = None
+    expected_payment: Optional[Tuple[float, str]] = None  # [amount, currency], present if payment_demanded in reasons
 
 
 class NoRideReasonEnum(str, Enum):
