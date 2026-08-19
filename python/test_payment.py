@@ -29,9 +29,9 @@ def record(**updates):
 class PaymentDemandedTest(unittest.TestCase):
     def test_expected_payment_is_valid_on_a_ride(self):
         parsed = HitchhikingRecord.model_validate(
-            record(ride={"expected_payment": (10, "EUR")})
+            record(ride={"expected_payment": ("10", "EUR")})
         )
-        self.assertEqual(parsed.ride.expected_payment, (10, "EUR"))
+        self.assertEqual(parsed.ride.expected_payment, ("10", "EUR"))
 
     def test_existing_ride_without_expected_payment_remains_valid(self):
         parsed = HitchhikingRecord.model_validate(
@@ -45,13 +45,13 @@ class PaymentDemandedTest(unittest.TestCase):
                 declined_rides=[
                     {
                         "reasons": ["payment_demanded"],
-                        "expected_payment": (10000, "SATS"),
+                        "expected_payment": ("10000", "SATS"),
                     }
                 ]
             )
         )
         self.assertEqual(parsed.declined_rides[0].reasons, ["payment_demanded"])
-        self.assertEqual(parsed.declined_rides[0].expected_payment, (10000, "SATS"))
+        self.assertEqual(parsed.declined_rides[0].expected_payment, ("10000", "SATS"))
 
     def test_unknown_declined_ride_reason_is_rejected(self):
         with self.assertRaises(ValidationError):
