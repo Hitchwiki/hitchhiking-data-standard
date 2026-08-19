@@ -98,8 +98,23 @@
         "gender": {"type": "string", "enum": ["male", "female", "non_binary", "prefer_not_to_say"]},
         "languages": {"type": "array", "items": {"type": "string", "pattern": "^[a-z]{3}$"}, "description": "ISO 639-3 codes."},
         "was_driver": {"type": "boolean"},
-        "image_link": {"type": "string", "format": "uri", "description": "Link to a profile picture of the person (e.g. a Gravatar URL, or a photo used on source)."}
+        "image_link": {"type": "string", "format": "uri", "description": "Link to a profile picture of the person (e.g. a Gravatar URL, or a photo used on source)."},
+        "items": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/item"},
+          "minItems": 1,
+          "description": "Animals or belongings travelling with this person, such as a dog, guitar, or bicycle."
+        }
       }
+    },
+    "item": {
+      "type": "object",
+      "properties": {
+        "name": {"type": "string", "minLength": 1, "description": "Lowercase common name of the animal or belonging."}
+      },
+      "required": ["name"],
+      "additionalProperties": true,
+      "description": "An animal or belonging attached to one person. Additional item-specific attributes are allowed and must be preserved by consumers."
     },
     "hitchhiker": {
       "$comment": "Inherits from person (tags/hitchhiker.md: 'inherits from person'), so allOf + its own additional fields rather than duplicating person's fields. Uses unevaluatedProperties, not additionalProperties, at this level -- additionalProperties:false on a sibling allOf branch only sees that branch's own properties, so it would wrongly reject the *other* branch's legitimate fields when the two are combined; unevaluatedProperties is JSON Schema 2020-12's fix for exactly this, and person itself was changed to carry no additionalProperties of its own so this is the only gate. Caught by actually validating STANDARD.md's own worked hitchhiker/occupant examples (jsonschema 4.26.0), not by eyeballing -- the first-pass version of this schema had the bug.",

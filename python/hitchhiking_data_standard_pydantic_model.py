@@ -14,7 +14,7 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
-from pydantic import Field, BaseModel
+from pydantic import Field, BaseModel, ConfigDict
 from typing import Annotated, List, Optional, Tuple
 from enum import Enum
 
@@ -64,6 +64,13 @@ class GenderEnum(str, Enum):
     non_binary = "non_binary"
     prefer_not_to_say = "prefer_not_to_say"
 
+class Item(BaseModel):
+    # Item-specific attributes are intentionally extensible and must survive a
+    # validation/serialization round trip even when this version does not know
+    # them yet.
+    model_config = ConfigDict(extra="allow")
+    name: str = Field(..., min_length=1)
+
 class Person(BaseModel, use_enum_values=True):
     origin_location: Optional[str] = None
     origin_country: Optional[str] = None
@@ -72,6 +79,7 @@ class Person(BaseModel, use_enum_values=True):
     languages: Optional[List[str]] = None
     was_driver: Optional[bool] = None
     image_link: Optional[str] = None  # URL to a profile picture (e.g. Gravatar, or a photo used on `source`)
+    items: Optional[List[Item]] = Field(None, min_items=1)  # Animals or belongings travelling with this person.
 
 
 class ReasonToPickUpEnum(str, Enum):
