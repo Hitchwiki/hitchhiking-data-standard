@@ -19,6 +19,7 @@ import { writeFileSync } from "fs";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
 import { config as loadEnv } from "dotenv";
+import { isDeleted, NostrEvent } from "./deletions.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -129,12 +130,37 @@ for (const relay of relayUrls) {
     }
 }
 
-// Build final array sorted by created_at, with relay info attached
-const allPosts = Array.from(eventMap.values())
+// NIP-09 deletion requests are intentionally fetched without a time cutoff.
+// A relay may already have removed the referenced ride, and retaining every
+// small kind-5 tombstone prevents a later full import from resurrecting it.
+const deletionMap = new Map<string, NostrEvent>();
+for (const relay of relayUrls) {
+    try {
+        const deletions = await fetcher.fetchAllEvents(
+            [relay],
+            { kinds: [5] },
+            {},
+            { sort: true },
+        );
+        for (const deletion of deletions) {
+            deletionMap.set(deletion.id, deletion as NostrEvent);
+        }
+    } catch (e) {
+        console.error(`Failed to fetch deletion requests from ${relay}:`, e);
+    }
+}
+const deletions = Array.from(deletionMap.values());
+console.log(deletions.length, "unique NIP-09 deletion requests fetched");
+
+// Build final array sorted by created_at, with relay info attached, then apply
+// author-authenticated event-id and address tombstones.
+const fetchedPosts = Array.from(eventMap.values())
     .sort((a, b) => a.event.created_at - b.event.created_at)
     .map(({ event, relays }) => ({ ...event, _relays: relays }));
+const allPosts = fetchedPosts.filter(post => !isDeleted(post as NostrEvent, deletions));
 
 console.log(allPosts.length, "unique posts fetched across", relayUrls.length, "relays");
+console.log(fetchedPosts.length - allPosts.length, "posts removed by NIP-09 requests");
 
 // Apply the optional source filter. A ride's origin app is stored in the
 // JSON-encoded "content" under "source"; relays cannot filter on content, so
