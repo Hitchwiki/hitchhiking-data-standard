@@ -68,6 +68,7 @@ class Person(BaseModel, use_enum_values=True):
     gender: Optional[GenderEnum] = None
     languages: Optional[List[str]] = None
     was_driver: Optional[bool] = None
+    image_link: Optional[str] = None  # URL to a profile picture (e.g. Gravatar, or a photo used on `source`)
 
 
 class ReasonToPickUpEnum(str, Enum):
