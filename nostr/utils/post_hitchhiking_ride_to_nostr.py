@@ -21,6 +21,7 @@ described below, verify that all your rides are on the relays and then remove th
 If you are certain that you want to permanantly publish the rides remove the expiration tag from the Nostr event.
 """
 
+import logging
 import time
 import uuid
 import sys
@@ -45,6 +46,13 @@ load_dotenv(".env")
 NSEC = os.getenv("NSEC")
 POST_TO_RELAYS = os.getenv("POST_TO_RELAYS").lower() in ("true", "1", "t")
 RELAYS = ast.literal_eval(os.getenv("RELAYS"))
+
+logger = logging.getLogger(__name__)
+
+# relay.maps.hitchwiki.org's own config.toml caps at 5 events/sec (issue #59/#61)
+# via nostr-rs-relay's token-bucket limiter, which allows only a small initial
+# burst before enforcing that sustained rate. Stay safely under it.
+DEFAULT_EVENTS_PER_SEC = 4.0
 
 
 class HitchhikingDataStandardToNostrPoster:
@@ -122,49 +130,87 @@ class HitchhikingDataStandardToNostrPoster:
             else:
                 print("Warning: No confirmation received from any relay")
 
-    def post_batch(self, ride_records: list[HitchhikingRecord], batch_size: int = 100):
-        """Post multiple records efficiently in batches"""
+    def post_batch(
+        self,
+        ride_records: list[HitchhikingRecord],
+        batch_size: int = 100,
+        events_per_sec: float = DEFAULT_EVENTS_PER_SEC,
+    ):
+        """Post multiple records, paced under the relay's own rate limit.
+
+        Previously this queued a whole `batch_size` chunk of events and fired
+        them at once (`run_sync()`), pausing only *between* batches -- against
+        relay.maps.hitchwiki.org's real `messages_per_sec = 5` (config.toml,
+        issue #59/#61) that burst blows straight through the limit, so most of
+        each batch would come back rejected. Worse, the old code drained OK
+        notices without ever reading `.ok`, so a run reported "published
+        N/N" regardless of how many the relay actually accepted -- exactly
+        the silent-loss issue #61 asks to fix. This paces one event at a time
+        at `events_per_sec` (default 4, below the relay's 5/sec cap) and
+        counts confirmed vs. rejected vs. unconfirmed for real, logging every
+        rejection (same pattern already shipped for the live app in
+        maps.hitchwiki.org's `post_hitchhiking_ride_to_nostr.py::flush()`).
+        `batch_size` now only controls progress-print granularity, kept for
+        backward compatibility with existing callers.
+        """
         if not POST_TO_RELAYS:
             print("POST_TO_RELAYS is disabled, skipping publishing")
             return
 
         total_records = len(ride_records)
-        print(f"Publishing {total_records} records in batches of {batch_size}")
-        print(f"Estimated time: ~{(total_records / batch_size * 0.2):.1f} seconds")
-        
-        published_count = 0
-        
-        for i in tqdm(range(0, total_records, batch_size), desc="Publishing batches"):
-            batch = ride_records[i:i + batch_size]
-            
-            try:
-                # Create and queue all events in the batch
-                for record in batch:
-                    event = self.create_event(record)
-                    self.relay_manager.publish_event(event)
-                
-                # Send the batch
-                self.relay_manager.run_sync()
-                published_count += len(batch)
-                
-                # Process any OK notices without blocking
-                processed_notices = 0
-                while self.relay_manager.message_pool.has_ok_notices() and processed_notices < batch_size:
-                    self.relay_manager.message_pool.get_ok_notice()
-                    processed_notices += 1
-                
-                # Brief pause between batches to avoid overwhelming relays
-                time.sleep(0.1)
-                
-            except Exception as e:
-                print(f"Error publishing batch {i//batch_size + 1}: {e}")
-                break
+        interval = 1.0 / events_per_sec
+        print(f"Publishing {total_records} records at ~{events_per_sec}/sec")
+        print(f"Estimated time: ~{(total_records * interval):.1f} seconds")
 
-            if i % 100 == 0:
-                print(f"Processed {i} records")
-                time.sleep(60) 
-        
-        print(f"Successfully published {published_count}/{total_records} records")
+        confirmed_count = 0
+        rejected_count = 0
+        unconfirmed_count = 0
+
+        for i, record in enumerate(tqdm(ride_records, desc="Publishing")):
+            start = time.monotonic()
+            try:
+                event = self.create_event(record)
+                self.relay_manager.publish_event(event)
+                self.relay_manager.run_sync()
+
+                # Give relays a moment to answer this specific event before moving
+                # on -- draining non-blockingly (the old code) risks the *next*
+                # event's OK notice arriving late and being misattributed here.
+                time.sleep(0.2)
+                self.relay_manager.run_sync()
+
+                got_notice = False
+                while self.relay_manager.message_pool.has_ok_notices():
+                    ok_notice = self.relay_manager.message_pool.get_ok_notice()
+                    got_notice = True
+                    if ok_notice.ok:
+                        confirmed_count += 1
+                    else:
+                        rejected_count += 1
+                        logger.warning(
+                            "Relay %s rejected event: %s", ok_notice.url, ok_notice.message
+                        )
+                if not got_notice:
+                    unconfirmed_count += 1
+            except Exception as e:
+                print(f"Error publishing record {i}: {e}")
+                unconfirmed_count += 1
+
+            elapsed = time.monotonic() - start
+            if elapsed < interval:
+                time.sleep(interval - elapsed)
+
+            if (i + 1) % batch_size == 0:
+                print(
+                    f"Processed {i + 1}/{total_records} "
+                    f"({confirmed_count} confirmed, {rejected_count} rejected, "
+                    f"{unconfirmed_count} unconfirmed)"
+                )
+
+        print(
+            f"Done: {confirmed_count} confirmed, {rejected_count} rejected, "
+            f"{unconfirmed_count} unconfirmed of {total_records} total"
+        )
 
     def _get_expires_at(self, tags: list) -> int | None:
         for tag in tags:
