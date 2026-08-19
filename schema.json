@@ -97,7 +97,8 @@
         "year_of_birth": {"type": "integer"},
         "gender": {"type": "string", "enum": ["male", "female", "non_binary", "prefer_not_to_say"]},
         "languages": {"type": "array", "items": {"type": "string", "pattern": "^[a-z]{3}$"}, "description": "ISO 639-3 codes."},
-        "was_driver": {"type": "boolean"}
+        "was_driver": {"type": "boolean"},
+        "image_link": {"type": "string", "format": "uri", "description": "Link to a profile picture of the person (e.g. a Gravatar URL, or a photo used on source)."}
       }
     },
     "hitchhiker": {
