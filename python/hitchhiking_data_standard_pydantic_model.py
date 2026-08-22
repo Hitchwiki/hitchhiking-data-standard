@@ -203,6 +203,7 @@ class Stop(BaseModel):
     arrival_time: Optional[str] = None  # RFC 9557 format
     departure_time: Optional[str] = None  # RFC 9557 format
     waiting_duration: Optional[str] = None  # ISO 8601 duration format
+    label: Optional[str] = None  # short free-text name, e.g. "onsen", most useful on an intermediate stop
 
 
 class HitchhikingRecord(BaseModel):

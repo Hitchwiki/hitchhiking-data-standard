@@ -259,7 +259,12 @@
         "location": {"$ref": "#/$defs/location"},
         "arrival_time": {"type": "string", "description": "RFC 9557 date-time."},
         "departure_time": {"type": "string", "description": "RFC 9557 date-time."},
-        "waiting_duration": {"type": "string", "pattern": "^P", "description": "ISO 8601 duration, e.g. PT50M."}
+        "waiting_duration": {"type": "string", "pattern": "^P", "description": "ISO 8601 duration, e.g. PT50M."},
+        "label": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Short free-text name for what this stop was, e.g. 'onsen', 'driver's grandparents' house', 'viewpoint'. Most useful on an intermediate stop (an item that is neither the first nor the last in 'stops'), where a bare coordinate does not say why the detour happened -- but not restricted to that position, since a labelled origin or destination (e.g. 'a friend's place') is equally valid data."
+        }
       },
       "additionalProperties": false
     }
