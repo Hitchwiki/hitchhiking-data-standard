@@ -50,8 +50,44 @@ Use the following Nostr-specific tags that make interacting with the Nostr event
 | `d`           | String (UUID recommended)     | Yes   | Unique identifier for the specific ride. Prevents duplicates, enables updates/deletion. By posting a new event with the same d tag its content can be changed - the older version of the event may be discarded by relays. Each application posting hitchhiking events can come up with their own schema, it is recommended to use "`source`-`version 4 UUID`". |
 | `g`           | String (Geohash Prefix)| Yes       | Cascading **origin** geohash (at least of length 10) for area filtering. This means there will be multiple g tags, one for each precision level that the geohash provides. Has to be equivalent to the loaction of the first `stop` object in the `stops` field in `content` (the starting location). |
 | `published_at`           | String (UNIX timestamp) | Yes       | The timestamp (in unix seconds – converted to string) of the first version of this ride that was published as a Nostr event. If a `source` application directly posts events to Nostr this is equivalent to the time in `submission_time` field in `content`. If the ride was recorded well before it was published as a Nostr event, then `submission_time` must be earlier than `published_at`. Note: this tag cannot be filtered by as it is not a single letter. |
-| `expiration`           | int| No       | If you are still testing and playing around with Nostr events set this to `0`. Otherwise this tag is not needed. |
+| `expiration`           | String (UNIX timestamp) | No | [NIP-40](https://github.com/nostr-protocol/nips/blob/master/40.md) timestamp after which a temporary event should expire. `0` is already expired and relays may drop the event immediately. This is useful for test events, but it is not a ride-deletion signal. |
 
+
+# How to delete a ride
+
+Publish a [NIP-09](https://github.com/nostr-protocol/nips/blob/master/09.md)
+kind-5 deletion request signed by the same key that signed the ride. Reference
+the ride by its address (`kind`, author public key, and `d` value), not by
+publishing an already-expired replacement:
+
+```json
+{
+  "kind": 5,
+  "content": "published by mistake",
+  "tags": [
+    ["a", "36820:<ride-author-pubkey>:<ride-d-tag>"],
+    ["e", "<current-ride-event-id>"],
+    ["k", "36820"]
+  ],
+  "pubkey": "<same-pubkey-as-the-ride>"
+}
+```
+
+The `a` tag is required by this standard. It addresses every version of the
+kind-36820 ride up to the deletion request's `created_at`; the `e` tag for the
+current event ID is recommended for compatibility with consumers that index
+deletions by event ID. The `k` tag declares the referenced event kind. Sign and
+publish the deletion request to every relay where the ride was published.
+
+Consumers must fetch kind-5 events as well as kind 36820. Hide a ride only when
+the deletion request's `pubkey` equals the ride author's public key (and, for an
+`a` tag, the public key inside the address). Apply an address deletion only to
+versions whose `created_at` is not later than the deletion request. Keep the
+deletion request or an equivalent tombstone so a later full import cannot
+restore a deleted ride.
+
+A deletion request cannot guarantee erasure from every relay or client that
+has already copied the event. Applications should say this plainly to users.
 
 # How does a hitchhiking ride look like as a Nostr event?
 
