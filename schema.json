@@ -205,8 +205,18 @@
           "type": "array",
           "items": {
             "type": "string",
-            "enum": ["wrong_direction", "too_short", "too_long", "risk_concern", "safety_concern", "space_missing", "too_slow"]
+            "enum": ["wrong_direction", "too_short", "too_long", "risk_concern", "safety_concern", "space_missing", "too_slow", "payment_demanded"]
           }
+        },
+        "expected_payment": {
+          "type": "array",
+          "description": "[amount, currency]. Payment the driver demanded for this declined ride, present when 'payment_demanded' is among reasons. Same rules as gift.price.",
+          "prefixItems": [
+            {"type": "string", "pattern": "^[0-9]+(\\.[0-9]+)?$"},
+            {"type": "string"}
+          ],
+          "minItems": 2,
+          "maxItems": 2
         }
       },
       "additionalProperties": false
@@ -228,7 +238,17 @@
       "type": "object",
       "properties": {
         "vehicle_destination": {"$ref": "#/$defs/location", "description": "Final destination of the vehicle ride, can be further than the hitchhiker's own ride."},
-        "reasons": {"type": "array", "items": {"type": "string", "enum": ["holiday", "commute", "business", "recreational", "errands"]}}
+        "reasons": {"type": "array", "items": {"type": "string", "enum": ["holiday", "commute", "business", "recreational", "errands"]}},
+        "expected_payment": {
+          "type": "array",
+          "description": "[amount, currency]. Payment demanded by the driver/occupants for this ride, if any was demanded. Same rules as gift.price.",
+          "prefixItems": [
+            {"type": "string", "pattern": "^[0-9]+(\\.[0-9]+)?$"},
+            {"type": "string"}
+          ],
+          "minItems": 2,
+          "maxItems": 2
+        }
       },
       "additionalProperties": false
     },

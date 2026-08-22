@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 from pydantic import Field, BaseModel
-from typing import List, Optional, Tuple
+from typing import Annotated, List, Optional, Tuple
 from enum import Enum
 
 
@@ -50,9 +50,12 @@ class ReasonEnum(str, Enum):
     recreational = "recreational"
     errands = "errands"
 
+DecimalString = Annotated[str, Field(pattern=r"^[0-9]+(\.[0-9]+)?$")]
+
 class Ride(BaseModel, use_enum_values=True):
     vehicle_destination: Optional[Location] = None
     reasons: Optional[List[ReasonEnum]] = None
+    expected_payment: Optional[Tuple[DecimalString, str]] = None  # [amount, currency], payment demanded (if any)
 
 
 class GenderEnum(str, Enum):
@@ -162,7 +165,7 @@ class GiftKindEnum(str, Enum):
 class Gift(BaseModel, use_enum_values=True):
     kind: GiftKindEnum = Field(...)
     description: Optional[str] = None
-    price: Optional[Tuple[float, str]] = None  # [amount, currency]
+    price: Optional[Tuple[DecimalString, str]] = None  # [amount, currency]
 
 class DeclinedRideReasonEnum(str, Enum):
     wrong_direction = "wrong_direction"
@@ -172,10 +175,12 @@ class DeclinedRideReasonEnum(str, Enum):
     safety_concern = "safety_concern"
     space_missing = "space_missing"
     too_slow = "too_slow"
+    payment_demanded = "payment_demanded"
 
 class DeclinedRide(BaseModel, use_enum_values=True):
     destination: Optional[Location] = None
     reasons: Optional[List[DeclinedRideReasonEnum]] = None
+    expected_payment: Optional[Tuple[DecimalString, str]] = None  # [amount, currency], present if payment_demanded in reasons
 
 
 class NoRideReasonEnum(str, Enum):
