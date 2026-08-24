@@ -99,6 +99,15 @@ class HitchhikingDataStandardToNostrPoster:
                 ["d", f"{ride_record.source}-{uuid.uuid4()}"],
                 *geohash_tags,
                 ["published_at", str(unix_timestamp_now)],
+                # Labels this ride into Trustroots' "hitchhikers" circle (nostroots
+                # docs/Events.md) so it's discoverable by any circle-based filter in
+                # Trustroots' own nostr apps (nos.trustroots.org), the same label
+                # Hitchwiki/nostrhitch's separate hitchmap-dump mirror already
+                # carries on its own events. This is the reference implementation
+                # every integrator copies -- carrying it here means every publisher
+                # built on this class gets it for free.
+                ["L", "trustroots-circle"],
+                ["l", "hitchhikers", "trustroots-circle"],
             ],
         )
 
