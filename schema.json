@@ -161,7 +161,7 @@
           "type": "array",
           "items": {
             "type": "string",
-            "enum": ["thumb", "waving", "sign", "asking", "invited", "prearranged"]
+            "enum": ["thumb", "waving", "sign", "asking", "invited", "prearranged", "unsolicited"]
           }
         },
         "sign_content": {"type": "string", "description": "Only if 'sign' is included in methods."},
