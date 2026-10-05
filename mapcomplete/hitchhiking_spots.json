@@ -107,10 +107,6 @@
             "en": "Is there a bench here?",
             "de": "Gibt es hier eine Bank?"
           },
-          "render": {
-            "en": "This spot has a bench",
-            "de": "Hier gibt es eine Bank"
-          },
           "mappings": [
             {
               "if": "bench=yes",
