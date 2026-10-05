@@ -1,0 +1,164 @@
+{
+  "id": "hitchhiking_spots",
+  "title": {
+    "en": "Hitchhiking spots",
+    "de": "Trampstellen"
+  },
+  "shortDescription": {
+    "en": "Map the places where people hitchhike, and Mitfahrbänke",
+    "de": "Trampstellen und Mitfahrbänke kartieren"
+  },
+  "description": {
+    "en": "Add and check hitchhiking spots in OpenStreetMap (highway=hitchhiking). Municipalities and mappers can add Mitfahrbänke here; the data shows up in the Hitchhiking Map at maps.hitchwiki.org.",
+    "de": "Trampstellen in OpenStreetMap ergänzen (highway=hitchhiking). Der Datensatz erscheint auf maps.hitchwiki.org."
+  },
+  "icon": "./assets/svg/bug.svg",
+  "version": "2026-10-05",
+  "startLat": 51.5,
+  "startLon": 10.0,
+  "startZoom": 6,
+  "layers": [
+    {
+      "id": "hitchhiking_spot",
+      "name": {
+        "en": "Hitchhiking spots and Mitfahrbänke",
+        "de": "Trampstellen und Mitfahrbänke"
+      },
+      "description": {
+        "en": "Places where people stand to hitchhike, including official Mitfahrbänke (hitchhiking benches).",
+        "de": "Orte, an denen Menschen trampen, einschließlich offizieller Mitfahrbänke."
+      },
+      "source": {
+        "osmTags": "highway=hitchhiking"
+      },
+      "minzoom": 12,
+      "title": {
+        "render": {
+          "en": "Hitchhiking spot",
+          "de": "Trampstelle"
+        },
+        "mappings": [
+          {
+            "if": "bench=yes",
+            "then": {
+              "en": "Hitchhiking bench (Mitfahrbank)",
+              "de": "Mitfahrbank"
+            }
+          }
+        ]
+      },
+      "pointRendering": [
+        {
+          "location": [
+            "point",
+            "centroid"
+          ],
+          "marker": [
+            {
+              "icon": "circle",
+              "color": "#2563eb"
+            }
+          ],
+          "iconSize": "40,40,center",
+          "label": {
+            "mappings": [
+              {
+                "if": "description~*",
+                "then": "{description}"
+              }
+            ]
+          }
+        }
+      ],
+      "presets": [
+        {
+          "title": {
+            "en": "a hitchhiking spot",
+            "de": "eine Trampstelle"
+          },
+          "tags": [
+            "highway=hitchhiking"
+          ],
+          "description": {
+            "en": "A place where people stand to hitchhike",
+            "de": "Ein Ort, an dem Menschen trampen"
+          }
+        },
+        {
+          "title": {
+            "en": "a Mitfahrbank (hitchhiking bench)",
+            "de": "eine Mitfahrbank"
+          },
+          "tags": [
+            "highway=hitchhiking",
+            "bench=yes"
+          ],
+          "description": {
+            "en": "An official bench for people who want a lift, mainly in Germany and Austria",
+            "de": "Eine offizielle Bank für Mitfahrgelegenheiten"
+          }
+        }
+      ],
+      "tagRenderings": [
+        "images",
+        {
+          "id": "is_bench",
+          "question": {
+            "en": "Is there a bench here?",
+            "de": "Gibt es hier eine Bank?"
+          },
+          "mappings": [
+            {
+              "if": "bench=yes",
+              "then": {
+                "en": "There is a bench",
+                "de": "Es gibt eine Bank"
+              }
+            },
+            {
+              "if": "bench=no",
+              "then": {
+                "en": "No bench",
+                "de": "Keine Bank"
+              }
+            }
+          ]
+        },
+        {
+          "id": "description",
+          "question": {
+            "en": "Which village or street is this spot in, and where does traffic head? (short description)",
+            "de": "In welchem Ort oder an welcher Straße liegt die Stelle? (kurze Beschreibung)"
+          },
+          "render": "{description}",
+          "freeform": {
+            "key": "description"
+          }
+        },
+        {
+          "id": "shelter",
+          "question": {
+            "en": "Is it covered?",
+            "de": "Ist es überdacht?"
+          },
+          "mappings": [
+            {
+              "if": "shelter=yes",
+              "then": {
+                "en": "It has a roof",
+                "de": "Mit Dach"
+              }
+            },
+            {
+              "if": "shelter=no",
+              "then": {
+                "en": "No roof",
+                "de": "Ohne Dach"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
